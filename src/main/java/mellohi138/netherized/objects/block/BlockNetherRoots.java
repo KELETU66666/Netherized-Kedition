@@ -1,9 +1,5 @@
 package mellohi138.netherized.objects.block;
 
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import mellohi138.netherized.Netherized;
 import mellohi138.netherized.enums.EnumNetherForestType;
 import mellohi138.netherized.init.NetherizedBlocks;
@@ -26,6 +22,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
+
+import javax.annotation.Nullable;
+import java.util.Random;
 
 public class BlockNetherRoots extends BlockBush implements IShearable {
 	private static final AxisAlignedBB ROOTS_AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 0.8125D, 0.875D);

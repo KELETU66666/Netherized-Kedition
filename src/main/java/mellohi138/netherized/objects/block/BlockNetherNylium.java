@@ -1,7 +1,5 @@
 package mellohi138.netherized.objects.block;
 
-import java.util.Random;
-
 import mellohi138.netherized.enums.EnumNetherForestType;
 import mellohi138.netherized.util.ModUtils;
 import net.minecraft.block.IGrowable;
@@ -14,6 +12,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class BlockNetherNylium extends BlockBase implements IGrowable {
 	private final EnumNetherForestType forestType;

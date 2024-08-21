@@ -1,8 +1,5 @@
 package mellohi138.netherized.init;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import mellohi138.netherized.Netherized;
 import mellohi138.netherized.objects.item.*;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -11,6 +8,9 @@ import net.minecraft.item.Item.ToolMaterial;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Netherized.MODID)
 public class NetherizedItems {

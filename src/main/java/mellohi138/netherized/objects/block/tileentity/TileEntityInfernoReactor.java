@@ -1,7 +1,5 @@
 package mellohi138.netherized.objects.block.tileentity;
 
-import java.util.List;
-
 import mellohi138.netherized.init.NetherizedBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -13,6 +11,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.List;
 
 public class TileEntityInfernoReactor extends TileEntity implements ITickable {
 	@Override

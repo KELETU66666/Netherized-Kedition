@@ -1,7 +1,5 @@
 package mellohi138.netherized.objects.item;
 
-import java.util.UUID;
-
 import mellohi138.netherized.Netherized;
 import mellohi138.netherized.util.config.NetherizedItemConfig;
 import net.minecraft.creativetab.CreativeTabs;
@@ -13,6 +11,8 @@ import net.minecraft.entity.passive.HorseArmorType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import java.util.UUID;
 
 public class ItemNetheriteHorseArmor extends Item {
 	public static final UUID KNOCKBACK_RESISTANCE_MODIFIER = UUID.fromString("ba912d2b-9413-3171-be0e-5b384abadf2a");

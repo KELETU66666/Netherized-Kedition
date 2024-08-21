@@ -1,7 +1,5 @@
 package mellohi138.netherized.objects.block;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -14,6 +12,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 public class BlockChain extends BlockRotatedPillarBase {
     private static final AxisAlignedBB AXIS_SHAPE_X = new AxisAlignedBB(0.0D, 0.40625D, 0.40625D, 1D, 0.59375D, 0.59375D);

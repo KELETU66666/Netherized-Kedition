@@ -1,9 +1,5 @@
 package mellohi138.netherized.objects.item;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import mellohi138.netherized.Netherized;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -17,6 +13,9 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemBruteAxe extends ItemAxe {
 	public ItemBruteAxe(String name, ToolMaterial materialIn, CreativeTabs tab) {

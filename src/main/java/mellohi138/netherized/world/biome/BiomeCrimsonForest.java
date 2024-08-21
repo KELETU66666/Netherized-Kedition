@@ -14,7 +14,7 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 public class BiomeCrimsonForest extends BiomeBase {
 	public BiomeCrimsonForest(String nameIn, BiomeProperties properties) {
 		super(nameIn, properties);
-		
+
 		this.topBlock = NetherizedBlocks.CRIMSON_NYLIUM.getDefaultState();
 		this.fillerBlock = Blocks.NETHERRACK.getDefaultState();
         
@@ -25,11 +25,11 @@ public class BiomeCrimsonForest extends BiomeBase {
 	
     @Override
     public BiomeDecorator createBiomeDecorator() {
-    	return this.getModdedBiomeDecorator(new DecoratorCrimsonForest());
+    	return new DecoratorCrimsonForest();
     }
 
 	@Override
 	public void setTypes() {
-		BiomeDictionary.addTypes(this, Type.HOT, Type.DRY, Type.NETHER);
+		BiomeDictionary.addTypes(this, Type.NETHER);
 	}
 }

@@ -1,7 +1,5 @@
 package mellohi138.netherized.objects.entity.neutral;
 
-import java.util.UUID;
-
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -19,6 +17,8 @@ import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+
+import java.util.UUID;
 
 public class EntityPiglin extends EntityAgeable {
 	private static final DataParameter<Boolean> IS_CHILD = EntityDataManager.<Boolean>createKey(EntityPiglin.class, DataSerializers.BOOLEAN);

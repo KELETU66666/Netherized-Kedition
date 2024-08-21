@@ -1,7 +1,5 @@
 package mellohi138.netherized.objects.block;
 
-import java.util.Random;
-
 import mellohi138.netherized.Netherized;
 import mellohi138.netherized.util.interfaces.ICustomRenderer;
 import net.minecraft.block.BlockDoor;
@@ -18,6 +16,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+
+import java.util.Random;
 
 public class BlockDoorBase extends BlockDoor implements ICustomRenderer {
 	private final MapColor color;

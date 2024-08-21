@@ -1,11 +1,6 @@
 package mellohi138.netherized.objects.item;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.google.common.collect.Multimap;
-
 import mellohi138.netherized.Netherized;
 import mellohi138.netherized.client.model.armor.ModelInfernalHelmet;
 import mellohi138.netherized.util.config.NetherizedItemConfig;
@@ -24,6 +19,9 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemInfernalHelmet extends ItemArmor {
 	private final AttributeModifier knockbackResistance;

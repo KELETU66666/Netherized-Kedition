@@ -1,15 +1,13 @@
 package mellohi138.netherized.init;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import mellohi138.netherized.Netherized;
 import mellohi138.netherized.enums.EnumNetherForestType;
-import mellohi138.netherized.objects.item.block.*;
-import mellohi138.netherized.util.config.NetherizedGeneralConfig;
 import mellohi138.netherized.objects.block.*;
-import mellohi138.netherized.objects.block.reregistered.*;
-import mellohi138.netherized.objects.block.tileentity.*;
+import mellohi138.netherized.objects.block.reregistered.BlockNewSoulSand;
+import mellohi138.netherized.objects.block.tileentity.TileEntityInfernoReactor;
+import mellohi138.netherized.objects.item.block.ItemDoorBase;
+import mellohi138.netherized.objects.item.block.ItemSlabBase;
+import mellohi138.netherized.util.config.NetherizedGeneralConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockSlab;
@@ -23,6 +21,9 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Netherized.MODID)
 public class NetherizedBlocks {

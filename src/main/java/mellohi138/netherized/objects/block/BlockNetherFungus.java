@@ -1,7 +1,5 @@
 package mellohi138.netherized.objects.block;
 
-import java.util.Random;
-
 import mellohi138.netherized.Netherized;
 import mellohi138.netherized.enums.EnumNetherForestType;
 import mellohi138.netherized.init.NetherizedBlocks;
@@ -20,6 +18,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.EnumPlantType;
+
+import java.util.Random;
 
 public class BlockNetherFungus extends BlockBush implements IGrowable {
 	private static final AxisAlignedBB FUNGUS_AABB = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 0.5625D, 0.75D);

@@ -1,7 +1,5 @@
 package mellohi138.netherized.objects.block;
 
-import java.util.Random;
-
 import mellohi138.netherized.Netherized;
 import mellohi138.netherized.init.NetherizedBlocks;
 import mellohi138.netherized.objects.block.tileentity.TileEntityInfernoReactor;
@@ -20,6 +18,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class BlockInfernoReactor extends BlockContainer {
     public static final PropertyBool IS_ACTIVE = PropertyBool.create("is_active");

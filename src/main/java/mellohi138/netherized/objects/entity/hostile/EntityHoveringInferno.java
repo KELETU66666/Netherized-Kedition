@@ -1,16 +1,9 @@
 package mellohi138.netherized.objects.entity.hostile;
 
-import javax.annotation.Nullable;
-
 import mellohi138.netherized.objects.entity.ai.EntityAIInfernoFight;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -24,6 +17,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public class EntityHoveringInferno extends EntityBlaze {
     private static final DataParameter<Boolean> IS_SHIELDING = EntityDataManager.<Boolean>createKey(EntityHoveringInferno.class, DataSerializers.BOOLEAN);

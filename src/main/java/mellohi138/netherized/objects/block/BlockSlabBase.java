@@ -1,7 +1,5 @@
 package mellohi138.netherized.objects.block;
 
-import java.util.Random;
-
 import mellohi138.netherized.util.interfaces.ICustomRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
@@ -19,6 +17,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+
+import java.util.Random;
 
 @SuppressWarnings("deprecation")
 public class BlockSlabBase extends BlockSlab implements ICustomRenderer {

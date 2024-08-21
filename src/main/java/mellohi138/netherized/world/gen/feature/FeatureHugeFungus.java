@@ -1,7 +1,5 @@
 package mellohi138.netherized.world.gen.feature;
 
-import java.util.Random;
-
 import mellohi138.netherized.enums.EnumNetherForestType;
 import mellohi138.netherized.init.NetherizedBlocks;
 import mellohi138.netherized.objects.block.BlockNetherVines;
@@ -15,6 +13,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
+import java.util.Random;
 
 /**
  * Code, again, taken from 1.16. No rights owned to it.
@@ -39,7 +39,7 @@ public class FeatureHugeFungus extends WorldGenerator {
 	
 	@Override
 	public boolean generate(World worldIn, Random rand, BlockPos pos) {      
-		if (worldIn.getBlockState(pos.down()).getBlock() == this.forestType.getVegetationBlocks("nylium")) {
+		if (worldIn.getBlockState(pos.down()).getBlock() == this.forestType.getVegetationBlocks("nylium") && worldIn.isAirBlock(pos)) {
 			int i = ModUtils.nextInt(rand, 4, 13);
 			if (rand.nextInt(12) == 0) {
 				i *= 2;

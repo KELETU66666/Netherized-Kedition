@@ -1,7 +1,5 @@
 package mellohi138.netherized.objects.block;
 
-import java.util.Random;
-
 import mellohi138.netherized.Netherized;
 import mellohi138.netherized.enums.EnumNetherizedParticles;
 import net.minecraft.block.BlockTorch;
@@ -14,6 +12,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 public class BlockSoulTorch extends BlockTorch {
 	public BlockSoulTorch(String name, SoundType type, CreativeTabs tab) {

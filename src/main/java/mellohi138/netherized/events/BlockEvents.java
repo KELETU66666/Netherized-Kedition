@@ -1,7 +1,5 @@
 package mellohi138.netherized.events;
 
-import java.util.Random;
-
 import mellohi138.netherized.Netherized;
 import mellohi138.netherized.init.NetherizedBlocks;
 import mellohi138.netherized.util.ModUtils;
@@ -13,8 +11,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.Random;
 
 @Mod.EventBusSubscriber(modid = Netherized.MODID)
 public class BlockEvents {

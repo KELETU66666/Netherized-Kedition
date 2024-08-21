@@ -13,7 +13,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 import java.util.Random;
 
-public class DecoratorCrimsonForest extends BiomeDecorator {
+public class DecoratorWarpedForest extends BiomeDecorator {
 
     protected World world;
     protected Random rand;
@@ -26,17 +26,14 @@ public class DecoratorCrimsonForest extends BiomeDecorator {
 
     private final WorldGenerator genHugeFungi;
     private final WorldGenerator genRoots;
+    private final WorldGenerator genSprouts;
     private final WorldGenerator genFungi;
-    private final WorldGenerator genShrub;
-    private final WorldGenerator genWarpedFungi;
 
-    public DecoratorCrimsonForest() {
-        //this.genNetherrackSplatter = new BlockSplatter(Blocks.NETHERRACK, 0, 128, NetherizedBlocks.CRIMSON_NYLIUM);
-        this.genHugeFungi = new FeatureHugeFungus(EnumNetherForestType.CRIMSON);
-        this.genRoots = new HellRootGroup(NetherizedBlocks.CRIMSON_ROOTS, 64);
-        this.genFungi = new NetherPlantGroup(NetherizedBlocks.CRIMSON_FUNGUS, 0, 64);
-        this.genShrub = new NetherPlantGroup(NetherizedBlocks.CRIMSON_ROOTS, 0, 64);
-        this.genWarpedFungi = new NetherPlantGroup(NetherizedBlocks.WARPED_FUNGUS, 1, 10);
+    public DecoratorWarpedForest() {
+        this.genHugeFungi = new FeatureHugeFungus(EnumNetherForestType.WARPED);
+        this.genRoots = new HellRootGroup(NetherizedBlocks.WARPED_ROOTS, 64);
+        this.genSprouts = new HellRootGroup(NetherizedBlocks.WARPED_SPROUTS, 64);
+        this.genFungi = new NetherPlantGroup(NetherizedBlocks.WARPED_FUNGUS, 1, 64);
     }
 
     @Override
@@ -55,6 +52,14 @@ public class DecoratorCrimsonForest extends BiomeDecorator {
             ++this.attempt;
         }
         this.attempt = 0;
+        while (this.attempt < 50) {
+            this.xx = this.x + this.offsetXZ();
+            this.yy = 4 + this.rand.nextInt(116);
+            this.zz = this.z + this.offsetXZ();
+            this.genSprouts.generate(this.world, this.rand, new BlockPos(this.xx, this.yy, this.zz));
+            ++this.attempt;
+        }
+        this.attempt = 0;
         while (this.attempt < 30) {
             this.xx = this.x + this.offsetXZ();
             this.yy = 4 + this.rand.nextInt(116);
@@ -63,27 +68,11 @@ public class DecoratorCrimsonForest extends BiomeDecorator {
             ++this.attempt;
         }
         this.attempt = 0;
-        while (this.attempt < 20) {
-            this.xx = this.x + this.offsetXZ();
-            this.yy = 4 + this.rand.nextInt(116);
-            this.zz = this.z + this.offsetXZ();
-            this.genShrub.generate(this.world, this.rand, new BlockPos(this.xx, this.yy, this.zz));
-            ++this.attempt;
-        }
-        this.attempt = 0;
         while (this.attempt < 10) {
             this.xx = this.x + this.offsetXZ();
             this.yy = 4 + this.rand.nextInt(116);
             this.zz = this.z + this.offsetXZ();
             this.genFungi.generate(this.world, this.rand, new BlockPos(this.xx, this.yy, this.zz));
-            ++this.attempt;
-        }
-        this.attempt = 0;
-        while (this.attempt < 5) {
-            this.xx = this.x + this.offsetXZ();
-            this.yy = 4 + this.rand.nextInt(116);
-            this.zz = this.z + this.offsetXZ();
-            this.genWarpedFungi.generate(this.world, this.rand, new BlockPos(this.xx, this.yy, this.zz));
             ++this.attempt;
         }
     }

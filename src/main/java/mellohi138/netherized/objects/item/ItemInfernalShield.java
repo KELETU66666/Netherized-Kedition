@@ -1,9 +1,5 @@
 package mellohi138.netherized.objects.item;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import mellohi138.netherized.Netherized;
 import mellohi138.netherized.client.render.item.RenderInfernalShield;
 import mellohi138.netherized.util.interfaces.ITEISRModel;
@@ -17,6 +13,9 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemInfernalShield extends ItemShield implements ITEISRModel {
 	public ItemInfernalShield(String name, CreativeTabs tab) {

@@ -1,16 +1,16 @@
 package mellohi138.netherized.init;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import mellohi138.netherized.Netherized;
-import mellohi138.netherized.objects.enchantment.*;
+import mellohi138.netherized.objects.enchantment.EnchantmentSoulSpeed;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantment.Rarity;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Netherized.MODID)
 public class NetherizedEnchantments {

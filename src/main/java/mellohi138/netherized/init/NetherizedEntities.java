@@ -1,9 +1,11 @@
 package mellohi138.netherized.init;
 
 import mellohi138.netherized.Netherized;
-import mellohi138.netherized.objects.entity.*;
-import mellohi138.netherized.objects.entity.passive.*;
-import mellohi138.netherized.objects.entity.hostile.*;
+import mellohi138.netherized.objects.entity.EntityFireproofItem;
+import mellohi138.netherized.objects.entity.EntityInfernoFireball;
+import mellohi138.netherized.objects.entity.hostile.EntityHoveringInferno;
+import mellohi138.netherized.objects.entity.hostile.EntityZombifiedPiglin;
+import mellohi138.netherized.objects.entity.passive.EntityStrider;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;

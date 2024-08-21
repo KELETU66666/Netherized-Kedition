@@ -1,7 +1,6 @@
 package mellohi138.netherized.objects.item;
 
 import com.google.common.collect.Multimap;
-
 import mellohi138.netherized.Netherized;
 import mellohi138.netherized.util.config.NetherizedItemConfig;
 import net.minecraft.creativetab.CreativeTabs;

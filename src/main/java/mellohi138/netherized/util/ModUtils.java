@@ -1,7 +1,5 @@
 package mellohi138.netherized.util;
 
-import java.util.Random;
-
 import mellohi138.netherized.enums.EnumNetherForestType;
 import mellohi138.netherized.init.NetherizedEnchantments;
 import mellohi138.netherized.util.config.NetherizedGeneralConfig;
@@ -15,6 +13,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+
+import java.util.Random;
 
 public class ModUtils {
 	/**

@@ -1,7 +1,5 @@
 package mellohi138.netherized.objects.block;
 
-import java.util.Random;
-
 import mellohi138.netherized.Netherized;
 import mellohi138.netherized.enums.EnumNetherizedParticles;
 import mellohi138.netherized.init.NetherizedSounds;
@@ -28,6 +26,8 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 public class BlockRespawnAnchor extends BlockBase {
 	public static final PropertyInteger CHARGE = PropertyInteger.create("charges", 0, 4);

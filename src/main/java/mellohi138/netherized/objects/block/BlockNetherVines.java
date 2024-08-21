@@ -1,9 +1,5 @@
 package mellohi138.netherized.objects.block;
 
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import mellohi138.netherized.Netherized;
 import mellohi138.netherized.enums.EnumNetherForestType;
 import mellohi138.netherized.init.NetherizedBlocks;
@@ -44,6 +40,9 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.util.Random;
 
 public class BlockNetherVines extends Block implements IPlantable, ICustomRenderer {
 	public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 15);

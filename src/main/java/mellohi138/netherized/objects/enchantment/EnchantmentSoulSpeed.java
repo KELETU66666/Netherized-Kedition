@@ -1,11 +1,11 @@
 package mellohi138.netherized.objects.enchantment;
 
-import java.util.UUID;
-
 import mellohi138.netherized.Netherized;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.inventory.EntityEquipmentSlot;
+
+import java.util.UUID;
 
 public class EnchantmentSoulSpeed extends Enchantment {
 	public static final UUID SOUL_SPEED_MODIFIER = UUID.fromString("0483aa4a-af8d-36a2-8693-22bec9caa265");

@@ -1,7 +1,5 @@
 package mellohi138.netherized.objects.item;
 
-import javax.annotation.Nullable;
-
 import mellohi138.netherized.Netherized;
 import mellohi138.netherized.init.NetherizedBlocks;
 import net.minecraft.block.state.IBlockState;
@@ -15,16 +13,14 @@ import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemCompass;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 public class ItemLodestoneCompass extends ItemCompass {
 	public ItemLodestoneCompass(String name) {

@@ -1,15 +1,14 @@
 package mellohi138.netherized.util;
 
-import java.util.Random;
-
 import com.google.common.base.Predicate;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
+import java.util.Random;
 
 public class WorldGenMinableNoAir extends WorldGenerator {
     private final IBlockState oreBlock;
@@ -31,12 +30,12 @@ public class WorldGenMinableNoAir extends WorldGenerator {
     @Override
     public boolean generate(World worldIn, Random rand, BlockPos position) {
         float f = rand.nextFloat() * (float)Math.PI;
-        double d0 = (double)((float)(position.getX() + 8) + MathHelper.sin(f) * (float)this.numberOfBlocks / 8.0F);
-        double d1 = (double)((float)(position.getX() + 8) - MathHelper.sin(f) * (float)this.numberOfBlocks / 8.0F);
-        double d2 = (double)((float)(position.getZ() + 8) + MathHelper.cos(f) * (float)this.numberOfBlocks / 8.0F);
-        double d3 = (double)((float)(position.getZ() + 8) - MathHelper.cos(f) * (float)this.numberOfBlocks / 8.0F);
-        double d4 = (double)(position.getY() + rand.nextInt(3) - 2);
-        double d5 = (double)(position.getY() + rand.nextInt(3) - 2);
+        double d0 = (float)(position.getX() + 8) + MathHelper.sin(f) * (float)this.numberOfBlocks / 8.0F;
+        double d1 = (float)(position.getX() + 8) - MathHelper.sin(f) * (float)this.numberOfBlocks / 8.0F;
+        double d2 = (float)(position.getZ() + 8) + MathHelper.cos(f) * (float)this.numberOfBlocks / 8.0F;
+        double d3 = (float)(position.getZ() + 8) - MathHelper.cos(f) * (float)this.numberOfBlocks / 8.0F;
+        double d4 = position.getY() + rand.nextInt(3) - 2;
+        double d5 = position.getY() + rand.nextInt(3) - 2;
 
         for (int i = 0; i < this.numberOfBlocks; ++i) {
             float f1 = (float)i / (float)this.numberOfBlocks;
