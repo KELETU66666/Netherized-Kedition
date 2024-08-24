@@ -45,106 +45,104 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 public class BlockNetherVines extends Block implements IPlantable, ICustomRenderer {
-	public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 15);
-	
-	private final EnumNetherForestType forestType;
-	protected final EnumFacing side;
-	
-	private static final AxisAlignedBB WEEPING_VINES_AABB = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 1.0D, 0.9375D);
-	private static final AxisAlignedBB TWISTING_VINES_AABB = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1.0D, 0.75D);
-	
-	public BlockNetherVines(String name, Material blockMaterialIn, MapColor blockMapColorIn, EnumNetherForestType forestTypeIn, EnumFacing sideIn, SoundType type, CreativeTabs tab) {
-		super(blockMaterialIn, blockMapColorIn);
-		this.setTranslationKey(name);
-		this.setRegistryName(Netherized.MODID, name);
-		this.setCreativeTab(tab);
-		this.setSoundType(type);
-		
-        this.setDefaultState(this.blockState.getBaseState().withProperty(AGE, Integer.valueOf(0)));
+    public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 15);
+
+    private final EnumNetherForestType forestType;
+    protected final EnumFacing side;
+
+    private static final AxisAlignedBB WEEPING_VINES_AABB = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 1.0D, 0.9375D);
+    private static final AxisAlignedBB TWISTING_VINES_AABB = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1.0D, 0.75D);
+
+    public BlockNetherVines(String name, Material blockMaterialIn, MapColor blockMapColorIn, EnumNetherForestType forestTypeIn, EnumFacing sideIn, SoundType type, CreativeTabs tab) {
+        super(blockMaterialIn, blockMapColorIn);
+        this.setTranslationKey(name);
+        this.setRegistryName(Netherized.MODID, name);
+        this.setCreativeTab(tab);
+        this.setSoundType(type);
+
+        this.setDefaultState(this.blockState.getBaseState().withProperty(AGE, 0));
         this.setTickRandomly(true);
-        
-		this.side = sideIn;
-		this.forestType = forestTypeIn;
-	}
-	
-	@Override
+
+        this.side = sideIn;
+        this.forestType = forestTypeIn;
+    }
+
+    @Override
     public IBlockState getStateFromMeta(int meta) {
-    	return this.getDefaultState().withProperty(AGE, MathHelper.clamp(meta, 0, 15));
+        return this.getDefaultState().withProperty(AGE, MathHelper.clamp(meta, 0, 15));
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-    	return state.getValue(AGE).intValue();
+        return state.getValue(AGE);
     }
-    
+
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[] {
-        		AGE
-        });
+        return new BlockStateContainer(this, AGE);
     }
-	
-	@Override
+
+    @Override
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
         IBlockState soil = worldIn.getBlockState(pos.offset(this.side.getOpposite()));
-        
+
         return this.canSustainBush(soil) || soil.getBlock() instanceof BlockNetherVines;
     }
-	
+
     protected boolean canSustainBush(IBlockState state) {
-		switch(this.forestType) {
-		case CRIMSON:
-			return state.getBlock() == forestType.getVegetationBlocks("wart") || state.getBlock() == Blocks.NETHERRACK;
-		case WARPED:
-			return state.getBlock() == forestType.getVegetationBlocks("nylium");
-		}
-		return false;
+        switch (this.forestType) {
+            case CRIMSON:
+                return state.getBlock() == forestType.getVegetationBlocks("wart") || state.getBlock() == Blocks.NETHERRACK;
+            case WARPED:
+                return state.isFullCube();
+        }
+        return false;
     }
-    
-	@Override
+
+    @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         this.checkAndDropBlock(worldIn, pos, state);
-        
-        if(worldIn.isAirBlock(pos.offset(this.side)) && worldIn.getBlockState(pos).getBlock() == this) {
-        	int age = worldIn.getBlockState(pos).getValue(AGE);
-        	
+
+        if (worldIn.isAirBlock(pos.offset(this.side)) && worldIn.getBlockState(pos).getBlock() == this) {
+            int age = worldIn.getBlockState(pos).getValue(AGE);
+
             worldIn.setBlockState(pos, this.getGrowingVine().withProperty(AGE, age));
         }
     }
-	
-	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		this.checkAndDropBlock(worldIn, pos, state);
-		
-		super.updateTick(worldIn, pos, state, rand);
-	}
-	
-	@Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		worldIn.setBlockState(pos, this.getGrowingVine());	
+
+    @Override
+    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+        this.checkAndDropBlock(worldIn, pos, state);
+
+        super.updateTick(worldIn, pos, state, rand);
     }
-	
+
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        worldIn.setBlockState(pos, this.getGrowingVine());
+    }
+
     protected void checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
         if (!this.canBlockStay(worldIn, pos, state)) {
-    		worldIn.destroyBlock(pos, true);
+            worldIn.destroyBlock(pos, true);
         }
     }
-    
+
     private boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state) {
-    	return this.canPlaceBlockAt(worldIn, pos);
+        return this.canPlaceBlockAt(worldIn, pos);
     }
-    
+
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-    	switch(this.forestType) {
-    	case CRIMSON:
-    		return WEEPING_VINES_AABB;
-    	case WARPED:
-    		return TWISTING_VINES_AABB;
-    	}
+        switch (this.forestType) {
+            case CRIMSON:
+                return WEEPING_VINES_AABB;
+            case WARPED:
+                return TWISTING_VINES_AABB;
+        }
         return NULL_AABB;
     }
-    
+
     @Override
     @Nullable
     public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
@@ -160,8 +158,8 @@ public class BlockNetherVines extends Block implements IPlantable, ICustomRender
     public boolean isFullCube(IBlockState state) {
         return false;
     }
-    
-	@Override
+
+    @Override
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
@@ -171,34 +169,34 @@ public class BlockNetherVines extends Block implements IPlantable, ICustomRender
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
         return BlockFaceShape.UNDEFINED;
     }
-	
-	@Override
-    public boolean isLadder(IBlockState state, IBlockAccess world, BlockPos pos, EntityLivingBase entity) { 
-    	return true; 
+
+    @Override
+    public boolean isLadder(IBlockState state, IBlockAccess world, BlockPos pos, EntityLivingBase entity) {
+        return true;
     }
-	
-	@Override
+
+    @Override
     public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-		if(entityIn instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer)entityIn;
-			Minecraft mc = Minecraft.getMinecraft();
-			if(player.motionY < -0.15F) {
-				player.motionY = -0.15F;
-			}
-			//TODO: Prevent this from working when chat is open
-			if(GameSettings.isKeyDown(mc.gameSettings.keyBindJump) && player.motionY < 0.2F) {
-				if(player.isSneaking()) {
-					player.motionY = 0.0F;
-				} else {
-					player.motionY = 0.2F;
-				}
-			}
-		}
+        if (entityIn instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) entityIn;
+            Minecraft mc = Minecraft.getMinecraft();
+            if (player.motionY < -0.15F) {
+                player.motionY = -0.15F;
+            }
+            //TODO: Prevent this from working when chat is open
+            if (GameSettings.isKeyDown(mc.gameSettings.keyBindJump) && player.motionY < 0.2F) {
+                if (player.isSneaking()) {
+                    player.motionY = 0.0F;
+                } else {
+                    player.motionY = 0.2F;
+                }
+            }
+        }
     }
-	
+
     @Override
     public EnumPlantType getPlantType(IBlockAccess world, BlockPos pos) {
-    	return EnumPlantType.Nether;
+        return EnumPlantType.Nether;
     }
 
     @Override
@@ -207,110 +205,110 @@ public class BlockNetherVines extends Block implements IPlantable, ICustomRender
         if (state.getBlock() != this) return getDefaultState();
         return state;
     }
-	
-	private IBlockState getGrowingVine() {
-		switch(this.forestType) {
-		case CRIMSON:
-			return NetherizedBlocks.WEEPING_VINES_END.getDefaultState();
-		case WARPED:
-			return NetherizedBlocks.TWISTING_VINES_END.getDefaultState();
-		}
-		return this.getDefaultState();
-	}
-	
-	@Override
-	public void registerModels() {
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Item.getItemFromBlock(this).getRegistryName(), "intentory"));
-		ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(AGE).build());
-	}
-	
-	public static class BlockNetherVinesEnd extends BlockNetherVines implements IGrowable, ICustomRenderer {
-		public BlockNetherVinesEnd(String name, Material blockMaterialIn, MapColor blockMapColorIn, EnumNetherForestType forestTypeIn, EnumFacing side, SoundType type) {
-			super(name, blockMaterialIn, blockMapColorIn, forestTypeIn, side, type, null);
-			
-			this.setTranslationKey(this.getBodyVine().getBlock().getRegistryName().getPath());
-		}
-		
-		@Override
-	    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-	    	return new ItemStack(Item.getItemFromBlock(this.getBodyVine().getBlock()), 1, this.damageDropped(state));
-	    }
-		
-		@Override
-		public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-			this.checkAndDropBlock(worldIn, pos, state);
-	        
+
+    private IBlockState getGrowingVine() {
+        switch (this.forestType) {
+            case CRIMSON:
+                return NetherizedBlocks.WEEPING_VINES_END.getDefaultState();
+            case WARPED:
+                return NetherizedBlocks.TWISTING_VINES_END.getDefaultState();
+        }
+        return this.getDefaultState();
+    }
+
+    @Override
+    public void registerModels() {
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Item.getItemFromBlock(this).getRegistryName(), "intentory"));
+        ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(AGE).build());
+    }
+
+    public static class BlockNetherVinesEnd extends BlockNetherVines implements IGrowable, ICustomRenderer {
+        public BlockNetherVinesEnd(String name, Material blockMaterialIn, MapColor blockMapColorIn, EnumNetherForestType forestTypeIn, EnumFacing side, SoundType type) {
+            super(name, blockMaterialIn, blockMapColorIn, forestTypeIn, side, type, null);
+
+            this.setTranslationKey(this.getBodyVine().getBlock().getRegistryName().getPath());
+        }
+
+        @Override
+        public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+            return new ItemStack(Item.getItemFromBlock(this.getBodyVine().getBlock()), 1, this.damageDropped(state));
+        }
+
+        @Override
+        public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+            this.checkAndDropBlock(worldIn, pos, state);
+
             BlockPos blockPos = pos.offset(this.side);
-            
-	        if (state.getValue(AGE) < 15 && ForgeHooks.onCropsGrowPre(worldIn, blockPos, worldIn.getBlockState(blockPos), rand.nextFloat() < 0.1F)) {
-	            if (worldIn.isAirBlock(blockPos)) {
-		        	worldIn.setBlockState(blockPos, state.cycleProperty(AGE));
-		        	ForgeHooks.onCropsGrowPost(worldIn, blockPos, worldIn.getBlockState(blockPos), state);
-	            }
-	        }
-		}
-		
-		@Override
-	    public boolean getTickRandomly() {
-	        return this.getDefaultState().getValue(AGE) < 15 && super.getTickRandomly();
-		}
-		
-		@Override
-	    protected boolean canSustainBush(IBlockState state) {
-			return super.canSustainBush(state) || state.getBlock().getDefaultState() == this.getBodyVine();
-	    }
-	    
-	    @Override
-	    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-	    	this.checkAndDropBlock(worldIn, pos, state);
-	    	
-	        if(worldIn.getBlockState(pos.offset(this.side)).getBlock() == this || worldIn.getBlockState(pos.offset(this.side)).getBlock() == this.getBodyVine().getBlock()) {
-	        	int age = worldIn.getBlockState(pos).getValue(AGE);
-	        	
-	            worldIn.setBlockState(pos, this.getBodyVine().withProperty(AGE, age));
-	        }
-	    }
-	    
-		@Override
-		public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient) {
-			return worldIn.isAirBlock(pos.offset(this.side)) && state.getValue(AGE) < 15;
-		}
 
-		@Override
-		public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, IBlockState state) {
-			return worldIn.isAirBlock(pos.offset(this.side)) && state.getValue(AGE) < 15;
-		}
+            if (state.getValue(AGE) < 15 && ForgeHooks.onCropsGrowPre(worldIn, blockPos, worldIn.getBlockState(blockPos), rand.nextFloat() < 0.1F)) {
+                if (worldIn.isAirBlock(blockPos)) {
+                    worldIn.setBlockState(blockPos, state.cycleProperty(AGE));
+                    ForgeHooks.onCropsGrowPost(worldIn, blockPos, worldIn.getBlockState(blockPos), state);
+                }
+            }
+        }
 
-		@Override
-		public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state) {
-			BlockPos blockPos = pos.offset(this.side);
-			int growthAmount = ModUtils.getPlantGrowthAmount(rand);
-		    int age = Math.min(state.getValue(AGE) + 1, 15);
-			
-			for(int k = 0; k < growthAmount; ++k) {
-				if(!worldIn.isAirBlock(blockPos)) return;
-				worldIn.setBlockState(blockPos, state.withProperty(AGE, Integer.valueOf(age)));
-		        blockPos = blockPos.offset(this.side);
-		        age = Math.min(age + 1, 15);
-			}
-		}
-		
-	    private IBlockState getBodyVine() {
-	    	switch(super.forestType) {
-	    	case CRIMSON:
-	    		return NetherizedBlocks.WEEPING_VINES.getDefaultState();
-	    	case WARPED:
-	    		return NetherizedBlocks.TWISTING_VINES.getDefaultState();
-	    	}
-	    	return this.getDefaultState();
-	    }
-		
-	    //We don't need to give this block a special item texture, so use the body vine texture instead
-		@Override
-		@SideOnly(Side.CLIENT)
-		public void registerModels() {
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Item.getItemFromBlock(this.getBodyVine().getBlock()).getRegistryName(), "intentory"));
-			ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(AGE).build());
-		}
-	}
+        @Override
+        public boolean getTickRandomly() {
+            return this.getDefaultState().getValue(AGE) < 15 && super.getTickRandomly();
+        }
+
+        @Override
+        protected boolean canSustainBush(IBlockState state) {
+            return super.canSustainBush(state) || state.getBlock().getDefaultState() == this.getBodyVine();
+        }
+
+        @Override
+        public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+            this.checkAndDropBlock(worldIn, pos, state);
+
+            if (worldIn.getBlockState(pos.offset(this.side)).getBlock() == this || worldIn.getBlockState(pos.offset(this.side)).getBlock() == this.getBodyVine().getBlock()) {
+                int age = worldIn.getBlockState(pos).getValue(AGE);
+
+                worldIn.setBlockState(pos, this.getBodyVine().withProperty(AGE, age));
+            }
+        }
+
+        @Override
+        public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient) {
+            return worldIn.isAirBlock(pos.offset(this.side)) && state.getValue(AGE) < 15;
+        }
+
+        @Override
+        public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, IBlockState state) {
+            return worldIn.isAirBlock(pos.offset(this.side)) && state.getValue(AGE) < 15;
+        }
+
+        @Override
+        public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state) {
+            BlockPos blockPos = pos.offset(this.side);
+            int growthAmount = ModUtils.getPlantGrowthAmount(rand);
+            int age = Math.min(state.getValue(AGE) + 1, 15);
+
+            for (int k = 0; k < growthAmount; ++k) {
+                if (!worldIn.isAirBlock(blockPos)) return;
+                worldIn.setBlockState(blockPos, state.withProperty(AGE, Integer.valueOf(age)));
+                blockPos = blockPos.offset(this.side);
+                age = Math.min(age + 1, 15);
+            }
+        }
+
+        private IBlockState getBodyVine() {
+            switch (super.forestType) {
+                case CRIMSON:
+                    return NetherizedBlocks.WEEPING_VINES.getDefaultState();
+                case WARPED:
+                    return NetherizedBlocks.TWISTING_VINES.getDefaultState();
+            }
+            return this.getDefaultState();
+        }
+
+        //We don't need to give this block a special item texture, so use the body vine texture instead
+        @Override
+        @SideOnly(Side.CLIENT)
+        public void registerModels() {
+            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Item.getItemFromBlock(this.getBodyVine().getBlock()).getRegistryName(), "intentory"));
+            ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(AGE).build());
+        }
+    }
 }

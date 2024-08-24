@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "ccc"
+    ],
+    "key": {
+        "c": {
+            "type": "minecraft:item",
+            "item": "warped_planks"
+        }
+    },
+    "result": {
+        "item": "warped_slab",
+        "data": 0,
+        "count": 6
+    }
+}

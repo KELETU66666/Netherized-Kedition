@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "ccc",
+        "cic",
+        "ccc"
+    ],
+    "key": {
+        "c": {
+            "type": "minecraft:item",
+            "item": "minecraft:stonebrick",
+            "data": 3
+        },
+        "i": {
+            "type": "forge:ore_dict",
+            "ore": "ingotNetherite"
+        }
+    },
+    "result": {
+        "item": "lodestone"
+    }
+}

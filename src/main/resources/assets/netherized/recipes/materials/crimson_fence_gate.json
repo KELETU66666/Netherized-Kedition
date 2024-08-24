@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "xcx",
+        "xcx"
+    ],
+    "key": {
+        "c": {
+            "type": "minecraft:item",
+            "item": "crimson_planks"
+        },
+        "x": {
+            "type": "forge:ore_dict",
+            "ore": "stickWood"
+        }
+    },
+    "result": {
+        "item": "crimson_fence_gate"
+    }
+}

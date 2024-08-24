@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "ooo",
+        "ccc",
+        "ooo"
+    ],
+    "key": {
+        "o": {
+            "type": "minecraft:item",
+            "item": "minecraft:obsidian"
+        },
+        "c": {
+            "type": "minecraft:item",
+            "item": "crying_obsidian"
+        }
+    },
+    "result": {
+        "item": "respawn_anchor"
+    }
+}

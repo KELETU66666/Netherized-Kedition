@@ -5,6 +5,7 @@ import mellohi138.netherized.init.NetherizedBlocks;
 import mellohi138.netherized.world.gen.feature.FeatureHugeFungus;
 import mellohi138.netherized.world.gen.feature.HellRootGroup;
 import mellohi138.netherized.world.gen.feature.NetherPlantGroup;
+import mellohi138.netherized.world.gen.feature.TwistingVinesGenerator;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -28,12 +29,14 @@ public class DecoratorWarpedForest extends BiomeDecorator {
     private final WorldGenerator genRoots;
     private final WorldGenerator genSprouts;
     private final WorldGenerator genFungi;
+    private final WorldGenerator genTwistingVines;
 
     public DecoratorWarpedForest() {
         this.genHugeFungi = new FeatureHugeFungus(EnumNetherForestType.WARPED);
         this.genRoots = new HellRootGroup(NetherizedBlocks.WARPED_ROOTS, 64);
         this.genSprouts = new HellRootGroup(NetherizedBlocks.WARPED_SPROUTS, 64);
         this.genFungi = new NetherPlantGroup(NetherizedBlocks.WARPED_FUNGUS, 1, 64);
+        this.genTwistingVines = new TwistingVinesGenerator();
     }
 
     @Override
@@ -73,6 +76,14 @@ public class DecoratorWarpedForest extends BiomeDecorator {
             this.yy = 4 + this.rand.nextInt(116);
             this.zz = this.z + this.offsetXZ();
             this.genFungi.generate(this.world, this.rand, new BlockPos(this.xx, this.yy, this.zz));
+            ++this.attempt;
+        }
+        this.attempt = 0;
+        while (this.attempt < 30) {
+            this.xx = this.x + this.offsetXZ();
+            this.yy = 4 + this.rand.nextInt(116);
+            this.zz = this.z + this.offsetXZ();
+            this.genTwistingVines.generate(this.world, this.rand, new BlockPos(this.xx, this.yy, this.zz));
             ++this.attempt;
         }
     }

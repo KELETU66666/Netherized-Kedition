@@ -1,0 +1,12 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "result": {
+        "item": "warped_planks",
+        "count": 4
+    },
+    "ingredients": [
+        {
+            "item": "warped_roots"
+        }
+    ]
+}

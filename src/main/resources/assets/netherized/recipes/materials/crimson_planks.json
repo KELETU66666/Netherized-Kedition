@@ -1,0 +1,12 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "result": {
+        "item": "crimson_planks",
+        "count": 4
+    },
+    "ingredients": [
+        {
+            "item": "crimson_roots"
+        }
+    ]
+}

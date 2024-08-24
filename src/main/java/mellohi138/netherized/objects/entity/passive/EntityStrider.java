@@ -39,108 +39,108 @@ import javax.annotation.Nullable;
 import java.util.Set;
 
 public class EntityStrider extends EntityAnimal {
-    private static final DataParameter<Boolean> IS_COLD = EntityDataManager.<Boolean>createKey(EntityStrider.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> IS_SADDLED = EntityDataManager.<Boolean>createKey(EntityStrider.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Integer> BOOST_TIME = EntityDataManager.<Integer>createKey(EntityStrider.class, DataSerializers.VARINT);
+    private static final DataParameter<Boolean> IS_COLD = EntityDataManager.createKey(EntityStrider.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> IS_SADDLED = EntityDataManager.createKey(EntityStrider.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> BOOST_TIME = EntityDataManager.createKey(EntityStrider.class, DataSerializers.VARINT);
     private static final Set<Item> TEMPTATION_ITEMS = Sets.newHashSet(Item.getItemFromBlock(NetherizedBlocks.WARPED_FUNGUS));
     private boolean boosting;
     private int boostTime;
     private int totalBoostTime;
-    
+
     private EntityAIPanic panicAI;
     private EntityAITempt temptationAI;
-    
-	public EntityStrider(World worldIn) {
-		super(worldIn);
-		this.setPathPriority(PathNodeType.WATER, -1.0F);
-		this.setPathPriority(PathNodeType.LAVA, 0.0F);
-		this.setPathPriority(PathNodeType.DANGER_FIRE, 0.0F); 
-		this.setPathPriority(PathNodeType.DAMAGE_FIRE, 0.0F);
-		this.isImmuneToFire = true;
-		this.setSize(0.9F, 1.7F);
-	}
-	
-	@Override
-    protected void entityInit() {
-		super.entityInit();
-        this.dataManager.register(BOOST_TIME, Integer.valueOf(0));
-        this.dataManager.register(IS_COLD, Boolean.valueOf(false));
-        this.dataManager.register(IS_SADDLED, Boolean.valueOf(false));
-    }
-    
-	@Override
-    public void onUpdate() {
-		super.onUpdate();
-		
-		if (this.isTempted() && this.rand.nextInt(140) == 0) {
-			this.playSound(NetherizedSounds.ENTITY_STRIDER_WARBLE, 1.0F, this.getSoundPitch());
-		} else if (this.isPanicing() && this.rand.nextInt(60) == 0) {
-			this.playSound(NetherizedSounds.ENTITY_STRIDER_RETREAT, 1.0F, this.getSoundPitch());
-		}
-		
-		if(this.getLavaCheck()) {
-			this.motionY = 0.0F;
-			this.onGround = true;
-		}
 
-    	this.doBlockCollisions();
+    public EntityStrider(World worldIn) {
+        super(worldIn);
+        this.setPathPriority(PathNodeType.WATER, -1.0F);
+        this.setPathPriority(PathNodeType.LAVA, 0.0F);
+        this.setPathPriority(PathNodeType.DANGER_FIRE, 0.0F);
+        this.setPathPriority(PathNodeType.DAMAGE_FIRE, 0.0F);
+        this.isImmuneToFire = true;
+        this.setSize(0.9F, 1.7F);
     }
-	
-	private boolean getLavaCheck() {
-		return this.getEntityWorld().getBlockState(new BlockPos(this.posX, this.posY, this.posZ)).getMaterial() == Material.LAVA;
-	}
-	
-	private boolean isPanicing() {     
-		return this.panicAI != null && this.panicAI.shouldExecute();
-	}
- 
-	private boolean isTempted() {  
-		return this.temptationAI != null && this.temptationAI.isRunning();
-	}
-    
-	@Override
+
+    @Override
+    protected void entityInit() {
+        super.entityInit();
+        this.dataManager.register(BOOST_TIME, 0);
+        this.dataManager.register(IS_COLD, Boolean.FALSE);
+        this.dataManager.register(IS_SADDLED, Boolean.FALSE);
+    }
+
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+
+        if (this.isTempted() && this.rand.nextInt(140) == 0) {
+            this.playSound(NetherizedSounds.ENTITY_STRIDER_WARBLE, 1.0F, this.getSoundPitch());
+        } else if (this.isPanicing() && this.rand.nextInt(60) == 0) {
+            this.playSound(NetherizedSounds.ENTITY_STRIDER_RETREAT, 1.0F, this.getSoundPitch());
+        }
+
+        if(this.getLavaCheck()) {
+            this.motionY = 0.0F;
+            this.onGround = true;
+        }
+
+        this.doBlockCollisions();
+    }
+
+    private boolean getLavaCheck() {
+        return this.getEntityWorld().getBlockState(new BlockPos(this.posX, this.posY, this.posZ)).getMaterial() == Material.LAVA;
+    }
+
+    private boolean isPanicing() {
+        return this.panicAI != null && this.panicAI.shouldExecute();
+    }
+
+    private boolean isTempted() {
+        return this.temptationAI != null && this.temptationAI.isRunning();
+    }
+
+    @Override
     protected void updateAITasks() {
-		super.updateAITasks();
+        super.updateAITasks();
         if (this.isWet()) {
             this.attackEntityFrom(DamageSource.DROWN, 1.0F);
         }
-		
-		this.setIsCold(!this.getLavaCheck());
+
+        this.setIsCold(!this.getLavaCheck() && !this.world.provider.isNether());
     }
-	
+
     protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
-    	this.doBlockCollisions();
-    	if(this.isInLava()) {
-    		this.fallDistance = 0F;
-    	} else {
-    		super.updateFallState(y, onGroundIn, state, pos);
-    	}
+        this.doBlockCollisions();
+        if(this.isInLava()) {
+            this.fallDistance = 0F;
+        } else {
+            super.updateFallState(y, onGroundIn, state, pos);
+        }
     }
-    
+
     public void notifyDataManagerChange(DataParameter<?> key) {
         if (BOOST_TIME.equals(key) && this.world.isRemote) {
             this.boosting = true;
             this.boostTime = 0;
-            this.totalBoostTime = ((Integer)this.dataManager.get(BOOST_TIME)).intValue();
+            this.totalBoostTime = this.dataManager.get(BOOST_TIME);
         }
         super.notifyDataManagerChange(key);
     }
-    
-	@Override
+
+    @Override
     public void writeEntityToNBT(NBTTagCompound compound) {
-		super.writeEntityToNBT(compound);
+        super.writeEntityToNBT(compound);
         compound.setBoolean("Saddle", this.getIsSaddled());
     }
-    
-	@Override
+
+    @Override
     public void readEntityFromNBT(NBTTagCompound compound) {
-		super.readEntityFromNBT(compound);
+        super.readEntityFromNBT(compound);
         this.setIsSaddled(compound.getBoolean("Saddle"));
     }
-	
-	@Override
+
+    @Override
     protected void initEntityAI() {
-		this.panicAI = new EntityAIPanic(this, 1.65D);
+        this.panicAI = new EntityAIPanic(this, 1.65D);
         this.tasks.addTask(0, this.panicAI);
         this.tasks.addTask(1, new EntityAIMate(this, 1.0D));
         this.temptationAI = new EntityAITempt(this, 1.4D, false, TEMPTATION_ITEMS);
@@ -152,19 +152,19 @@ public class EntityStrider extends EntityAnimal {
         this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(8, new EntityAILookIdle(this));
     }
-	
+
     protected PathNavigate createNavigator(World worldIn) {
-		return new PathNavigateLava(this, worldIn);
+        return new PathNavigateLava(this, worldIn);
     }
-    
-	@Override
+
+    @Override
     protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
+        super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(16.0F);
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.175F);
     }
-	
-	@Override
+
+    @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
         if (!super.processInteract(player, hand)) {
             ItemStack itemstack = player.getHeldItem(hand);
@@ -179,9 +179,9 @@ public class EntityStrider extends EntityAnimal {
                 return true;
             } else if (itemstack.getItem() == Items.SADDLE) {
                 itemstack.interactWithEntity(player, this, hand);
-                this.world.playSound((EntityPlayer)null, this.posX, this.posY + 0.5F, this.posZ, SoundEvents.ENTITY_PIG_SADDLE, this.getSoundCategory(), 1.0F, 1.0F);
-            	this.setIsSaddled(true);
-            	itemstack.shrink(1);
+                this.world.playSound(null, this.posX, this.posY + 0.5F, this.posZ, SoundEvents.ENTITY_PIG_SADDLE, this.getSoundCategory(), 1.0F, 1.0F);
+                this.setIsSaddled(true);
+                itemstack.shrink(1);
                 return true;
             } else {
                 return false;
@@ -190,44 +190,44 @@ public class EntityStrider extends EntityAnimal {
             return true;
         }
     }
-	
+
     public static void registerFixesStrider(DataFixer fixer) {
         EntityLiving.registerFixesMob(fixer, EntityStrider.class);
     }
-    
+
     protected void playStepSound(BlockPos pos, Block blockIn) {
-    	this.playSound(this.getLavaCheck() ? NetherizedSounds.ENTITY_STRIDER_STEP_LAVA : NetherizedSounds.ENTITY_STRIDER_STEP, 1.0F, 1.0F);
+        this.playSound(this.getLavaCheck() ? NetherizedSounds.ENTITY_STRIDER_STEP_LAVA : NetherizedSounds.ENTITY_STRIDER_STEP, 1.0F, 1.0F);
     }
-	
+
     @Nullable
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficultyIn, @Nullable IEntityLivingData livingData) {
-    	if(this.isChild()) {
-        	return super.onInitialSpawn(difficultyIn, livingData);
+        if(this.isChild()) {
+            return super.onInitialSpawn(difficultyIn, livingData);
         } else {
-        	if(!this.world.isRemote) {
-        		if(this.rand.nextInt(30) == 0) {
-        			EntityPigZombie zombifiedPiglin = new EntityPigZombie(this.world);
-        			livingData = this.addRider(difficultyIn, zombifiedPiglin, livingData);
-        		} else if(this.rand.nextInt(10) == 0) {
-        			EntityStrider strider = new EntityStrider(this.world);
-        			strider.setGrowingAge(-24000);
-        			livingData = this.addRider(difficultyIn, strider, livingData);
-        		}
-        		return super.onInitialSpawn(difficultyIn, livingData);
-        	}
-    		return super.onInitialSpawn(difficultyIn, livingData);
+            if(!this.world.isRemote) {
+                if(this.rand.nextInt(30) == 0) {
+                    EntityPigZombie zombifiedPiglin = new EntityPigZombie(this.world);
+                    livingData = this.addRider(difficultyIn, zombifiedPiglin, livingData);
+                } else if(this.rand.nextInt(10) == 0) {
+                    EntityStrider strider = new EntityStrider(this.world);
+                    strider.setGrowingAge(-24000);
+                    livingData = this.addRider(difficultyIn, strider, livingData);
+                }
+                return super.onInitialSpawn(difficultyIn, livingData);
+            }
+            return super.onInitialSpawn(difficultyIn, livingData);
         }
     }
-    
+
     private IEntityLivingData addRider(DifficultyInstance difficultyIn, EntityLiving entityIn, @Nullable IEntityLivingData livingData) {
-    	entityIn.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
-    	entityIn.onInitialSpawn(difficultyIn, livingData);
-		this.world.spawnEntity(entityIn);
-		entityIn.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, NetherizedItems.WARPED_FUNGUS_ON_A_STICK.getDefaultInstance());
-		entityIn.startRiding(this);
+        entityIn.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+        entityIn.onInitialSpawn(difficultyIn, livingData);
+        this.world.spawnEntity(entityIn);
+        entityIn.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, NetherizedItems.WARPED_FUNGUS_ON_A_STICK.getDefaultInstance());
+        entityIn.startRiding(this);
         return livingData;
-     }
-    
+    }
+
     public boolean canBeSteered() {
         Entity entity = this.getControllingPassenger();
 
@@ -238,13 +238,13 @@ public class EntityStrider extends EntityAnimal {
             return entityplayer.getHeldItemMainhand().getItem() == NetherizedItems.WARPED_FUNGUS_ON_A_STICK || entityplayer.getHeldItemOffhand().getItem() == NetherizedItems.WARPED_FUNGUS_ON_A_STICK;
         }
     }
-    
+
     @Override
     @Nullable
     public Entity getControllingPassenger() {
         return this.getPassengers().isEmpty() ? null : this.getPassengers().get(0);
     }
-    
+
     public void onDeath(DamageSource cause) {
         super.onDeath(cause);
 
@@ -254,16 +254,16 @@ public class EntityStrider extends EntityAnimal {
             }
         }
     }
-    
+
     @Nullable
     protected ResourceLocation getLootTable() {
-    	return null;
+        return null;
     }
-    
+
     @Override
     public void travel(float strafe, float vertical, float forward) {
-    	this.setAIMoveSpeed((float)this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * (this.getIsCold() ? 0.66F : 1.0F));
-    	
+        this.setAIMoveSpeed((float)this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * (this.getIsCold() ? 0.66F : 1.0F));
+
         Entity entity = this.getControllingPassenger();
 
         if (this.isBeingRidden() && this.canBeSteered()) {
@@ -320,11 +320,11 @@ public class EntityStrider extends EntityAnimal {
             this.boosting = true;
             this.boostTime = 0;
             this.totalBoostTime = this.getRNG().nextInt(841) + 140;
-            this.getDataManager().set(BOOST_TIME, Integer.valueOf(this.totalBoostTime));
+            this.getDataManager().set(BOOST_TIME, this.totalBoostTime);
             return true;
         }
     }
-    
+
     public double getMountedYOffset() {
         float f = Math.min(0.25F, this.limbSwingAmount);
         float f1 = this.limbSwing;
@@ -332,32 +332,32 @@ public class EntityStrider extends EntityAnimal {
     }
 
     public boolean getIsSaddled() {
-        return this.dataManager.get(IS_SADDLED).booleanValue();
+        return this.dataManager.get(IS_SADDLED);
     }
 
     public void setIsSaddled(boolean saddled) {
-    	this.dataManager.set(IS_SADDLED, Boolean.valueOf(saddled));
+        this.dataManager.set(IS_SADDLED, saddled);
     }
-    
+
     public boolean getIsCold() {
-    	return this.dataManager.get(IS_COLD).booleanValue();
+        return this.dataManager.get(IS_COLD) && !this.world.provider.isNether();
     }
-    
+
     public void setIsCold(boolean isCold) {
-    	this.dataManager.set(IS_COLD, isCold);
+        this.dataManager.set(IS_COLD, isCold);
     }
-    
+
     @Override
     public boolean isBreedingItem(ItemStack stack) {
         return TEMPTATION_ITEMS.contains(stack.getItem());
     }
-    
+
     @Override
     @Nullable
     protected SoundEvent getAmbientSound() {
         return !this.isPanicing() && !this.isTempted() ? NetherizedSounds.ENTITY_STRIDER_CHIRP : null;
     }
-    
+
     @Override
     @Nullable
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
@@ -369,9 +369,9 @@ public class EntityStrider extends EntityAnimal {
     protected SoundEvent getDeathSound() {
         return NetherizedSounds.ENTITY_STRIDER_DEATH;
     }
-	
-	@Override
-	public EntityAgeable createChild(EntityAgeable ageable) {
-		return new EntityStrider(this.world);
-	}
+
+    @Override
+    public EntityAgeable createChild(EntityAgeable ageable) {
+        return new EntityStrider(this.world);
+    }
 }
