@@ -6,13 +6,36 @@
     },
     "ingredients": [
         {
-            "item": "netherite_scrap",
-            "count": 4
+            "item": "netherite_scrap"
+        },
+        {
+            "item": "netherite_scrap"
+        },
+        {
+            "item": "netherite_scrap"
+        },
+        {
+            "item": "netherite_scrap"
         },
         {
             "type": "forge:ore_dict",
-            "ore": "ingotGold",
-            "count": 4
+            "ore": "ingotGold"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "ingotGold"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "ingotGold"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "ingotGold"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "ingotGold"
         }
     ]
 }
