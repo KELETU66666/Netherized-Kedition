@@ -1,0 +1,18 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "result": {
+        "item": "netherite_ingot",
+        "count": 1
+    },
+    "ingredients": [
+        {
+            "item": "netherite_scrap",
+            "count": 4
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "ingotGold",
+            "count": 4
+        }
+    ]
+}

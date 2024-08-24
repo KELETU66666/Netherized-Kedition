@@ -4,6 +4,7 @@ import mellohi138.netherized.Netherized;
 import mellohi138.netherized.init.NetherizedItems;
 import mellohi138.netherized.objects.item.ItemBruteAxe;
 import mellohi138.netherized.objects.item.ItemInfernalShield;
+import mellohi138.netherized.recipe.ArmorUpgradeRecipe;
 import mellohi138.netherized.util.ModUtils;
 import mellohi138.netherized.util.config.NetherizedGeneralConfig;
 import mellohi138.netherized.util.config.NetherizedItemConfig;
@@ -19,19 +20,47 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.event.AnvilUpdateEvent;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.registries.IForgeRegistry;
 
 @Mod.EventBusSubscriber(modid = Netherized.MODID)
 public class ItemEvents {
+
+	@SubscribeEvent
+	public static void registerRecipes(RegistryEvent.Register<IRecipe> evt) {
+		IForgeRegistry<IRecipe> r = evt.getRegistry();
+
+		r.register(new ArmorUpgradeRecipe(NetherizedItems.NETHERITE_HELMET, Items.DIAMOND_HELMET)
+				.setRegistryName(Netherized.MODID, "netherite_helmet"));
+		r.register(new ArmorUpgradeRecipe(NetherizedItems.NETHERITE_CHESTPLATE, Items.DIAMOND_CHESTPLATE)
+				.setRegistryName(Netherized.MODID, "netherite_chestplate"));
+		r.register(new ArmorUpgradeRecipe(NetherizedItems.NETHERITE_LEGGINGS, Items.DIAMOND_LEGGINGS)
+				.setRegistryName(Netherized.MODID, "netherite_leggings"));
+		r.register(new ArmorUpgradeRecipe(NetherizedItems.NETHERITE_BOOTS, Items.DIAMOND_BOOTS)
+				.setRegistryName(Netherized.MODID, "netherite_boots"));
+		r.register(new ArmorUpgradeRecipe(NetherizedItems.NETHERITE_SWORD, Items.DIAMOND_SWORD)
+				.setRegistryName(Netherized.MODID, "netherite_sword"));
+		r.register(new ArmorUpgradeRecipe(NetherizedItems.NETHERITE_PICKAXE, Items.DIAMOND_PICKAXE)
+				.setRegistryName(Netherized.MODID, "netherite_pickaxe"));
+		r.register(new ArmorUpgradeRecipe(NetherizedItems.NETHERITE_AXE, Items.DIAMOND_AXE)
+				.setRegistryName(Netherized.MODID, "netherite_axe"));
+		r.register(new ArmorUpgradeRecipe(NetherizedItems.NETHERITE_SHOVEL, Items.DIAMOND_SHOVEL)
+				.setRegistryName(Netherized.MODID, "netherite_shovel"));
+		r.register(new ArmorUpgradeRecipe(NetherizedItems.NETHERITE_HOE, Items.DIAMOND_HOE)
+				.setRegistryName(Netherized.MODID, "netherite_hoe"));
+	}
+
 	@SubscribeEvent
 	public static void addBruteAxeDamage(LivingHurtEvent event) {
 		Entity source = event.getSource().getImmediateSource();

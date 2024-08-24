@@ -1,9 +1,12 @@
 package mellohi138.netherized;
 
+import mellohi138.netherized.init.NetherizedBlocks;
+import mellohi138.netherized.init.NetherizedItems;
 import mellohi138.netherized.util.NetherizedCreativeTabs;
 import mellohi138.netherized.util.RegistryHandler;
 import mellohi138.netherized.util.interfaces.IProxy;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -11,6 +14,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = Netherized.MODID, name = Netherized.MODNAME, version = Netherized.VERSION)
@@ -45,6 +49,8 @@ public class Netherized {
     @EventHandler
     public void init(FMLInitializationEvent event) {
         RegistryHandler.registerOreDict();
+
+        GameRegistry.addSmelting(NetherizedBlocks.ANCIENT_DEBRIS, new ItemStack(NetherizedItems.NETHERITE_SCRAP, 1), 2.0F);
 
         PROXY.init();
     }
