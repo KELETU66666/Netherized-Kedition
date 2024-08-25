@@ -23,6 +23,8 @@ import mellohi138.netherized.Netherized;
 import mellohi138.netherized.init.NetherizedBiomes;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @Mod.EventBusSubscriber(modid = Netherized.MODID)
 public class BiomeTraitGenerationHandler
@@ -34,6 +36,7 @@ public class BiomeTraitGenerationHandler
         event.registry.registerBiome(NetherizedBiomes.WARPED_FOREST, 5);
     }
 
+    @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public static void onPreBiomeDecorate(NetherAPIFogColorEvent event)
     {
