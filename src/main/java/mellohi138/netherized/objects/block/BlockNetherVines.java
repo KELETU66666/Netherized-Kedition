@@ -217,6 +217,7 @@ public class BlockNetherVines extends Block implements IPlantable, ICustomRender
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void registerModels() {
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Item.getItemFromBlock(this).getRegistryName(), "intentory"));
         ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(AGE).build());

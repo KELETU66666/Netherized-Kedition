@@ -16,6 +16,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
@@ -50,6 +52,7 @@ public class BlockDoorBase extends BlockDoor implements ICustomRenderer {
     }
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerModels() {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
 		ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(POWERED).build());
