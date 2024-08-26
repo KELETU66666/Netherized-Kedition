@@ -10,15 +10,12 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
-import net.minecraft.client.settings.GameSettings;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -179,12 +176,11 @@ public class BlockNetherVines extends Block implements IPlantable, ICustomRender
     public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
         if (entityIn instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entityIn;
-            Minecraft mc = Minecraft.getMinecraft();
             if (player.motionY < -0.15F) {
                 player.motionY = -0.15F;
             }
             //TODO: Prevent this from working when chat is open
-            if (GameSettings.isKeyDown(mc.gameSettings.keyBindJump) && player.motionY < 0.2F) {
+            if (player.isJumping && player.motionY < 0.2F) {
                 if (player.isSneaking()) {
                     player.motionY = 0.0F;
                 } else {
