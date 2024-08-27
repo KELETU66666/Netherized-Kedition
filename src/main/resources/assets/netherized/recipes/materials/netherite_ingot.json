@@ -32,10 +32,6 @@
         {
             "type": "forge:ore_dict",
             "ore": "ingotGold"
-        },
-        {
-            "type": "forge:ore_dict",
-            "ore": "ingotGold"
         }
     ]
 }
