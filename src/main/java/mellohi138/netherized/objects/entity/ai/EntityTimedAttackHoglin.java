@@ -39,7 +39,7 @@ public class EntityTimedAttackHoglin <T extends EntityHoglin & IAttack> extends 
 
     @Override
     public boolean shouldExecute() {
-        return this.entity.getAttackTarget() != null && !this.entity.hasNearbyBlockItHates;
+        return this.entity.getAttackTarget() != null;
     }
 
     @Override
