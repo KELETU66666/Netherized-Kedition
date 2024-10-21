@@ -9,6 +9,10 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
+/*
+* Author: grim3212
+* Under CC-BY-NC-SA License https://creativecommons.org/licenses/by-nc-sa/4.0
+* */
 public class EntityAIAvoidBlock extends EntityAIBase {
 
     private final EntityCreature theEntityCreature;
