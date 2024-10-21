@@ -9,6 +9,7 @@ import mellohi138.netherized.client.model.animation.IAttack;
 import mellohi138.netherized.init.NetherizedBlocks;
 import mellohi138.netherized.init.NetherizedSounds;
 import mellohi138.netherized.objects.entity.EntityNetherAnimalBase;
+import mellohi138.netherized.objects.entity.ai.EntityAIAvoidBlock;
 import mellohi138.netherized.objects.entity.ai.EntityAIMateHoglin;
 import mellohi138.netherized.objects.entity.ai.EntityAITemptHoglin;
 import mellohi138.netherized.objects.entity.ai.EntityTimedAttackHoglin;
@@ -39,6 +40,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Set;
 
 public class EntityHoglin extends EntityNetherAnimalBase implements IAttack, IAnimatedEntity {
@@ -50,8 +52,6 @@ public class EntityHoglin extends EntityNetherAnimalBase implements IAttack, IAn
     //just a variable that holds what the current animation is
     private EZAnimation currentAnimation;
     private EntityAITemptHoglin temptationAI;
-    public boolean hasNearbyBlockItHates = false;
-
     private static final Set<Item> TEMPTATION_ITEMS = Sets.newHashSet(Item.getItemFromBlock(NetherizedBlocks.CRIMSON_FUNGUS));
 
     private boolean initChildAI = false;
@@ -62,7 +62,6 @@ public class EntityHoglin extends EntityNetherAnimalBase implements IAttack, IAn
         this.isImmuneToFire = true;
     }
 
-    private int checkForBlocksTimer = 30;
     private boolean hasPlayedAngrySound = false;
 
     private int dimensionCheck = 40;
@@ -94,39 +93,6 @@ public class EntityHoglin extends EntityNetherAnimalBase implements IAttack, IAn
         } else if (target == null) {
             hasPlayedAngrySound = false;
         }
-
-        if(checkForBlocksTimer < 0) {
-            AxisAlignedBB box = getEntityBoundingBox().grow(16, 6, 16);
-            //This checks for the nearby blocks this entity is scared of
-            BlockPos posToo = this.getPosition();
-
-            if(ModUtils.searchForBlocks(box, world, this, NetherizedBlocks.WARPED_FUNGUS.getDefaultState()) != null) {
-                hasNearbyBlockItHates = true;
-                posToo = ModUtils.searchForBlocks(box, world, this, NetherizedBlocks.WARPED_FUNGUS.getDefaultState());
-            }
-
-            else if(ModUtils.searchForBlocks(box, world, this, NetherizedBlocks.RESPAWN_ANCHOR.getDefaultState()) != null) {
-                hasNearbyBlockItHates = true;
-                posToo = ModUtils.searchForBlocks(box, world, this, NetherizedBlocks.RESPAWN_ANCHOR.getDefaultState());
-            }
-
-            else if(ModUtils.searchForBlocks(box, world, this, Blocks.PORTAL.getDefaultState()) != null) {
-                hasNearbyBlockItHates = true;
-                posToo = ModUtils.searchForBlocks(box, world, this, Blocks.PORTAL.getDefaultState());
-            }
-
-            if(hasNearbyBlockItHates) {
-                Vec3d away = this.getPositionVector().subtract(new Vec3d(posToo.getX(), posToo.getY(), posToo.getZ())).normalize();
-                Vec3d pos = this.getPositionVector().add(away.scale(8)).add(ModRand.randVec().scale(4));
-                this.getNavigator().tryMoveToXYZ(pos.x, pos.y, pos.z, 1.5);
-            } else {
-                hasNearbyBlockItHates = false;
-            }
-            checkForBlocksTimer = 30;
-        } else {
-            checkForBlocksTimer--;
-        }
-
 
         if(dimensionCheck < 0) {
             if(this.world.provider.getDimension() != -1) {
@@ -196,7 +162,8 @@ public class EntityHoglin extends EntityNetherAnimalBase implements IAttack, IAn
         this.tasks.addTask(5, new EntityAIFollowParent(this, 1.0D));
         this.tasks.addTask(8, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, 1, true, false, null));
-        this.targetTasks.addTask(2, new EntityAIHurtByTarget(this, true, new Class[0]));
+        this.targetTasks.addTask(2, new EntityAIAvoidBlock(this, 1.2D, Arrays.asList(NetherizedBlocks.WARPED_FUNGUS, NetherizedBlocks.RESPAWN_ANCHOR, Blocks.PORTAL)));
+        this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, true));
 
     }
 

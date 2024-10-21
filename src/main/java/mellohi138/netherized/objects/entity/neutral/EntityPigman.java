@@ -4,9 +4,9 @@ import com.google.common.collect.Lists;
 import mellohi138.netherized.Netherized;
 import mellohi138.netherized.init.NetherizedBlocks;
 import mellohi138.netherized.init.NetherizedSounds;
+import mellohi138.netherized.objects.entity.ai.EntityAIAvoidBlock;
 import mellohi138.netherized.objects.entity.ai.EntityPigmanMelee;
 import mellohi138.netherized.objects.entity.ai.EntityPigmanRanged;
-import mellohi138.netherized.util.ModRand;
 import mellohi138.netherized.util.ModUtils;
 import mellohi138.netherized.util.config.NetherizedEntitiesConfig;
 import net.minecraft.block.Block;
@@ -39,20 +39,15 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
 
 import javax.annotation.Nullable;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class EntityPigman extends EntityMob implements IRangedAttackMob {
     private static final DataParameter<Boolean> IS_CHILD = EntityDataManager.createKey(EntityPigman.class, DataSerializers.BOOLEAN);
@@ -83,11 +78,9 @@ public class EntityPigman extends EntityMob implements IRangedAttackMob {
     public boolean convertTooZombie = false;
 
     protected boolean hasPlayedAngrySound = false;
-    private boolean hasNearbyBlockItHates = false;
     private boolean setGear = false;
 
     private int tickOut = 100;
-    private int checkForBlocksTimer = 30;
     protected boolean canTrade = true;
 
     public EntityPigman(World worldIn) {
@@ -119,7 +112,8 @@ public class EntityPigman extends EntityMob implements IRangedAttackMob {
         this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 9.0F));
         this.tasks.addTask(8, new EntityAILookIdle(this));
         this.targetTasks.addTask(2, new EntityAIHurtByTarget(this, true));
-        //this.targetTasks.addTask(3, new EntityAIAvoidEntity<>(this, EntityPigZombie.class, 3.0F, 1.1D, 1.2D));
+        this.targetTasks.addTask(3, new EntityAIAvoidBlock(this, 1.2D, Arrays.asList(NetherizedBlocks.SOUL_FIRE, NetherizedBlocks.SOUL_TORCH)));
+        this.targetTasks.addTask(3, new EntityAIAvoidEntity<>(this, EntityPigZombie.class, 6.0F, 1.1D, 1.2D));
         this.targetTasks.addTask(4, new EntityAINearestAttackableTarget<>(this, EntityWitherSkeleton.class, 1, true, false, null));
     }
 
@@ -433,7 +427,7 @@ public class EntityPigman extends EntityMob implements IRangedAttackMob {
         if (target != null && !world.isRemote) {
             boolean canSee = this.getEntitySenses().canSee(target);
 
-            if (!target.isEntityAlive() || !canSee || hasNearbyBlockItHates) {
+            if (!target.isEntityAlive() || !canSee) {
                 if (tickOut < 0) {
                     this.setAttackTarget(null);
                     tickOut = 100;
@@ -442,46 +436,6 @@ public class EntityPigman extends EntityMob implements IRangedAttackMob {
                 }
             }
         }
-
-        //Flee from XyZ blocks
-        if (!world.isRemote) {
-            AxisAlignedBB box = getEntityBoundingBox().grow(16, 6, 16);
-            //This checks for the nearby blocks this entity is scared of
-            BlockPos posToo = this.getPosition();
-
-            if (checkForBlocksTimer < 0) {
-                //Search for Soul Fire
-                if (ModUtils.searchForBlocks(box, world, this, NetherizedBlocks.SOUL_FIRE.getDefaultState()) != null) {
-                    hasNearbyBlockItHates = true;
-                    posToo = ModUtils.searchForBlocks(box, world, this, NetherizedBlocks.SOUL_FIRE.getDefaultState());
-                }
-                //Search for Soul Torches
-                else if (ModUtils.searchForBlocks(box, world, this, NetherizedBlocks.SOUL_TORCH.getDefaultState()) != null) {
-                    hasNearbyBlockItHates = true;
-                    posToo = ModUtils.searchForBlocks(box, world, this, NetherizedBlocks.SOUL_TORCH.getDefaultState());
-                }
-                //Since Lanterns are inside of Bastions, just as a check, might make this configurable
-                else if (ModUtils.searchForBlocks(box, world, this, NetherizedBlocks.SHROOMLIGHT.getDefaultState()) != null && !isInsideBastion()) {
-                    hasNearbyBlockItHates = true;
-                    posToo = ModUtils.searchForBlocks(box, world, this, NetherizedBlocks.SHROOMLIGHT.getDefaultState());
-                } else {
-                    //sets to false
-                    hasNearbyBlockItHates = false;
-                    posToo = null;
-                }
-                checkForBlocksTimer = 30;
-            } else {
-                checkForBlocksTimer--;
-            }
-
-            // if it has a nearby block it hates run away from that Pos
-            if (hasNearbyBlockItHates && posToo != null) {
-                Vec3d away = this.getPositionVector().subtract(new Vec3d(posToo.getX(), posToo.getY(), posToo.getZ())).normalize();
-                Vec3d pos = this.getPositionVector().add(away.scale(8)).add(ModRand.randVec().scale(4));
-                this.getNavigator().tryMoveToXYZ(pos.x, pos.y, pos.z, 1.8D);
-            }
-        }
-
 
         if (!world.isRemote && world.rand.nextInt(12) == 0 && !this.isInsideBastion()) {
             if (this.isHungryTimer < 0) {
