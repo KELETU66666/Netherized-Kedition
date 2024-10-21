@@ -10,10 +10,7 @@ import mellohi138.netherized.util.ModRand;
 import mellohi138.netherized.util.ModUtils;
 import mellohi138.netherized.util.config.NetherizedEntitiesConfig;
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -122,7 +119,7 @@ public class EntityPigman extends EntityMob implements IRangedAttackMob {
         this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 9.0F));
         this.tasks.addTask(8, new EntityAILookIdle(this));
         this.targetTasks.addTask(2, new EntityAIHurtByTarget(this, true));
-        this.targetTasks.addTask(3, new EntityAIAvoidEntity<>(this, EntityPigZombie.class, 3.0F, 1.1D, 1.2D));
+        //this.targetTasks.addTask(3, new EntityAIAvoidEntity<>(this, EntityPigZombie.class, 3.0F, 1.1D, 1.2D));
         this.targetTasks.addTask(4, new EntityAINearestAttackableTarget<>(this, EntityWitherSkeleton.class, 1, true, false, null));
     }
 
@@ -134,6 +131,11 @@ public class EntityPigman extends EntityMob implements IRangedAttackMob {
     protected void addBastionChanges() {
         this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, 1, true, false, null));
         this.initiateBastionAI = true;
+    }
+
+    @Override
+    public boolean isOnSameTeam(Entity entity) {
+        return entity == this || entity instanceof EntityPigmanBrute;
     }
 
     @Override
@@ -208,7 +210,7 @@ public class EntityPigman extends EntityMob implements IRangedAttackMob {
 
     @Override
     public boolean canDespawn() {
-        return !this.isNoDespawnRequired();
+        return !this.isNoDespawnRequired() && !this.isInsideBastion();
     }
 
     public void setChildSize(boolean isChild) {
@@ -223,10 +225,6 @@ public class EntityPigman extends EntityMob implements IRangedAttackMob {
             this.multiplySize(1.0F);
         }
 
-    }
-
-    public void setInsideBastion(boolean value) {
-        this.dataManager.set(INSIDE_BASTION, value);
     }
 
     protected final void multiplySize(float size) {
@@ -341,6 +339,10 @@ public class EntityPigman extends EntityMob implements IRangedAttackMob {
         return this.dataManager.get(INSIDE_BASTION);
     }
 
+    public void setInsideBastion(boolean value) {
+        this.dataManager.set(INSIDE_BASTION, value);
+    }
+
     protected void initMeleeAI() {
         if (this.getHeldItemOffhand().getItem() != ModUtils.getOffhandItem())
             this.tasks.addTask(2, new EntityPigmanMelee<>(this, 1.0D, false));
@@ -382,7 +384,6 @@ public class EntityPigman extends EntityMob implements IRangedAttackMob {
     public void initiateStuff() {
         if (this.getHeldItemMainhand().getItem() instanceof ItemBow) {
             this.initRangedAI();
-
         } else {
             this.initMeleeAI();
         }

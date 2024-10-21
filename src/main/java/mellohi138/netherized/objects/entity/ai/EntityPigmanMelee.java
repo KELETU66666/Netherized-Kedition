@@ -18,22 +18,22 @@ public class EntityPigmanMelee<T extends EntityPigman> extends EntityAIAttackMel
 
     @Override
     public boolean shouldExecute() {
-        List<EntityItem> nearbyItems = this.entity.world.getEntitiesWithinAABB(EntityItem.class, this.entity.getEntityBoundingBox().grow(5D), e -> !e.getIsInvulnerable());
-        if(!nearbyItems.isEmpty()) {
-            for(EntityItem item : nearbyItems) {
-                if(item.getItem().getItem().equals(ModUtils.getOffhandItem())) {
-                    return false;
+            List<EntityItem> nearbyItems = this.entity.world.getEntitiesWithinAABB(EntityItem.class, this.entity.getEntityBoundingBox().grow(5D), e -> !e.getIsInvulnerable());
+            if (!nearbyItems.isEmpty()) {
+                for (EntityItem item : nearbyItems) {
+                    if (item.getItem().getItem().equals(ModUtils.getOffhandItem())) {
+                        return false;
+                    }
                 }
             }
-        }
-        if(entity.getHeldItemOffhand().getItem() == ModUtils.getOffhandItem())
-            return false;
+            if (entity.getHeldItemOffhand().getItem() == ModUtils.getOffhandItem())
+                return false;
 
-        return this.entity.getAttackTarget() != null;
+            return super.shouldExecute();
     }
 
     @Override
     public boolean shouldContinueExecuting() {
-        return (this.shouldExecute() || !this.entity.getNavigator().noPath());
+        return (this.shouldExecute() && !this.entity.getNavigator().noPath());
     }
 }

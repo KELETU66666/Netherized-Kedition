@@ -38,7 +38,7 @@ public class EntityAIMoveToLava extends EntityAIMoveToBlock {
 	
 	@Override
     public void startExecuting() {
-        this.entity.getNavigator().tryMoveToXYZ((double)((float)this.destinationBlock.getX()) + 0.5D, (double)(this.destinationBlock.getY()), (double)((float)this.destinationBlock.getZ()) + 0.5D, this.movementSpeed);
+        this.entity.getNavigator().tryMoveToXYZ((double)((float)this.destinationBlock.getX()) + 0.5D, this.destinationBlock.getY(), (double)((float)this.destinationBlock.getZ()) + 0.5D, this.movementSpeed);
         this.timeoutCounter = 0;
         this.setMaxStayTicks(this.entity.getRNG().nextInt(this.entity.getRNG().nextInt(1200) + 1200) + 1200);
     }
@@ -50,7 +50,7 @@ public class EntityAIMoveToLava extends EntityAIMoveToBlock {
             ++this.timeoutCounter;
 
             if (this.timeoutCounter % 20 == 0) {
-                this.entity.getNavigator().tryMoveToXYZ((double)((float)this.destinationBlock.getX()) + 0.5D, (double)(this.destinationBlock.getY()), (double)((float)this.destinationBlock.getZ()) + 0.5D, this.movementSpeed);
+                this.entity.getNavigator().tryMoveToXYZ((double)((float)this.destinationBlock.getX()) + 0.5D, this.destinationBlock.getY(), (double)((float)this.destinationBlock.getZ()) + 0.5D, this.movementSpeed);
             }
         } else {
             this.isAboveDestination = true;

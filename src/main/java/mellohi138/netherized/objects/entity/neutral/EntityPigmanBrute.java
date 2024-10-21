@@ -39,8 +39,15 @@ public class EntityPigmanBrute extends EntityMob {
     protected static final DataParameter<Boolean> IMMOVABLE = EntityDataManager.createKey(EntityPigmanBrute.class, DataSerializers.BOOLEAN);
     protected static final DataParameter<Boolean> FIGHT_MODE = EntityDataManager.createKey(EntityPigmanBrute.class, DataSerializers.BOOLEAN);
     public static final DataParameter<Boolean> INSIDE_BASTION = EntityDataManager.createKey(EntityPigmanBrute.class, DataSerializers.BOOLEAN);
-    protected void setMeleeAttack(boolean value) {this.dataManager.set(MELEE_ATTACK, value);}
-    public boolean isMeleeAttack() {return this.dataManager.get(MELEE_ATTACK);}
+
+    protected void setMeleeAttack(boolean value) {
+        this.dataManager.set(MELEE_ATTACK, value);
+    }
+
+    public boolean isMeleeAttack() {
+        return this.dataManager.get(MELEE_ATTACK);
+    }
+
     protected boolean isImmovable() {
         return this.dataManager == null ? false : this.dataManager.get(IMMOVABLE);
     }
@@ -49,11 +56,21 @@ public class EntityPigmanBrute extends EntityMob {
         this.dataManager.set(IMMOVABLE, immovable);
     }
 
-    public boolean isFightMode() {return this.dataManager.get(FIGHT_MODE);}
+    public boolean isFightMode() {
+        return this.dataManager.get(FIGHT_MODE);
+    }
 
-    protected void setFightMode(boolean value) {this.dataManager.set(FIGHT_MODE, value);}
-    public boolean isInsideBastion() {return this.dataManager.get(INSIDE_BASTION);}
-    public void setInsideBastion(boolean value) {this.dataManager.set(INSIDE_BASTION, value);}
+    protected void setFightMode(boolean value) {
+        this.dataManager.set(FIGHT_MODE, value);
+    }
+
+    public boolean isInsideBastion() {
+        return this.dataManager.get(INSIDE_BASTION);
+    }
+
+    public void setInsideBastion(boolean value) {
+        this.dataManager.set(INSIDE_BASTION, value);
+    }
 
     //used for animation system
     private int animationTick;
@@ -109,12 +126,12 @@ public class EntityPigmanBrute extends EntityMob {
 
         EntityLivingBase target = this.getAttackTarget();
 
-        if(target != null && !hasPlayedAngrySound) {
+        if (target != null && !hasPlayedAngrySound) {
             this.playSound(NetherizedSounds.ENTITY_PIGLIN_BRUTE_SNORT_ANGRY, 1.0f, 1.0f / (rand.nextFloat() * 0.4f + 0.5f));
             //Allows Brutes to call on nearby Piglins to aid
             List<EntityPigman> nearbyPiglins = this.world.getEntitiesWithinAABB(EntityPigman.class, this.getEntityBoundingBox().grow(12D), e -> !e.getIsInvulnerable());
-            if(!nearbyPiglins.isEmpty()) {
-                for(EntityPigman piglin : nearbyPiglins) {
+            if (!nearbyPiglins.isEmpty()) {
+                for (EntityPigman piglin : nearbyPiglins) {
                     piglin.setAttackTarget(target);
                 }
             }
@@ -124,11 +141,11 @@ public class EntityPigmanBrute extends EntityMob {
         }
 
         //helper to set targeted to null if the intended target is dead
-        if(target != null && !world.isRemote) {
+        if (target != null && !world.isRemote) {
             boolean canSee = this.getEntitySenses().canSee(target);
 
-            if(!target.isEntityAlive() || !canSee) {
-                if(tickOut < 0) {
+            if (!target.isEntityAlive() || !canSee) {
+                if (tickOut < 0) {
                     this.setAttackTarget(null);
                     tickOut = 200;
                 } else {
@@ -139,10 +156,10 @@ public class EntityPigmanBrute extends EntityMob {
 
         }
 
-        if(dimensionCheck < 0) {
-            if(this.world.provider.getDimension() != -1) {
+        if (dimensionCheck < 0) {
+            if (this.world.provider.getDimension() != -1) {
                 //Start Zombification Process
-                if(countDownToZombie < 0 && !this.convertTooZombie) {
+                if (countDownToZombie < 0 && !this.convertTooZombie) {
                     this.setAttackTarget(null);
                     this.setImmovable(true);
                     this.convertTooZombie = true;
@@ -158,10 +175,14 @@ public class EntityPigmanBrute extends EntityMob {
         }
     }
 
+    @Override
+    public boolean isOnSameTeam(Entity entity) {
+        return entity == this || entity instanceof EntityPigman;
+    }
 
 
     private void beginZombieTransformation() {
-        if(!world.isRemote) {
+        if (!world.isRemote) {
             addEvent(() -> this.playSound(NetherizedSounds.ENTITY_PIGLIN_CONVERSION, 1.0f, 0.8f), 75);
             addEvent(() -> {
                 EntityPigZombie zombie = new EntityPigZombie(world);
@@ -204,7 +225,7 @@ public class EntityPigmanBrute extends EntityMob {
 
     @Override
     protected boolean canDespawn() {
-        if(this.isInsideBastion()) {
+        if (this.isInsideBastion()) {
             return false;
         }
         // Edit this to restricting them not despawning in Dungeons
@@ -213,6 +234,7 @@ public class EntityPigmanBrute extends EntityMob {
     }
 
     private static final ResourceLocation LOOT = new ResourceLocation(Netherized.MODID, "piglin_brute");
+
     @Override
     protected ResourceLocation getLootTable() {
         return null;
@@ -243,8 +265,7 @@ public class EntityPigmanBrute extends EntityMob {
     }
 
     @Override
-    protected void playStepSound(BlockPos pos, Block blockIn)
-    {
+    protected void playStepSound(BlockPos pos, Block blockIn) {
         this.playSound(NetherizedSounds.ENTITY_PIGLIN_BRUTE_STEP, 0.15F, 1.0f / (rand.nextFloat() * 0.4F + 0.2f));
     }
 
