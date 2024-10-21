@@ -12,6 +12,7 @@ import net.minecraft.util.math.Vec3d;
 /*
 * Author: grim3212
 * Under CC-BY-NC-SA License https://creativecommons.org/licenses/by-nc-sa/4.0
+* Changed by keletu: allow user detect multiple blocks at once.
 * */
 public class EntityAIAvoidBlock extends EntityAIBase {
 
