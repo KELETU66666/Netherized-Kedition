@@ -1,7 +1,5 @@
 package mellohi138.netherized.world;
 
-import git.jbredwards.nether_api.mod.common.world.gen.ChunkGeneratorNether;
-import mellohi138.netherized.init.NetherizedBiomes;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;

@@ -5,6 +5,7 @@ import mellohi138.netherized.init.NetherizedItems;
 import mellohi138.netherized.util.NetherizedCreativeTabs;
 import mellohi138.netherized.util.RegistryHandler;
 import mellohi138.netherized.util.interfaces.IProxy;
+import mellohi138.netherized.world.StructureHandler;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Mod;
@@ -14,6 +15,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.Logger;
 
@@ -51,6 +53,7 @@ public class Netherized {
         RegistryHandler.registerOreDict();
 
         GameRegistry.addSmelting(NetherizedBlocks.ANCIENT_DEBRIS, new ItemStack(NetherizedItems.NETHERITE_SCRAP, 1), 2.0F);
+        StructureHandler.handleStructureRegistries();
 
         PROXY.init();
     }
@@ -58,5 +61,13 @@ public class Netherized {
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         PROXY.postInit();
+    }
+
+    public static <MSG extends IMessage> void sendMSGToAll(MSG message) {
+
+        //  for(EntityPlayerMP playerMP : Minecraft.getMinecraft().) {
+        //  sendNonLocal(message, playerMP);
+        //  }
+        //network.sendToAll(message);
     }
 }

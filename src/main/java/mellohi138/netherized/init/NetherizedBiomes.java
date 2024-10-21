@@ -3,6 +3,7 @@ package mellohi138.netherized.init;
 import mellohi138.netherized.Netherized;
 import mellohi138.netherized.world.biome.BiomeBase;
 import mellohi138.netherized.world.biome.BiomeCrimsonForest;
+import mellohi138.netherized.world.biome.BiomeSoulValley;
 import mellohi138.netherized.world.biome.BiomeWarpedForest;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.BiomeProperties;
@@ -21,7 +22,9 @@ public class NetherizedBiomes {
 
 	public static BiomeBase CRIMSON_FOREST = registerBiome(new BiomeCrimsonForest("crimson_forest", new BiomeProperties("Crimson Forest").setTemperature(2.0F).setRainfall(0.0F).setRainDisabled().setWaterColor(4159204)));
 	public static BiomeBase WARPED_FOREST = registerBiome(new BiomeWarpedForest("warped_forest", new BiomeProperties("Warped Forest").setTemperature(2.0F).setRainfall(0.0F).setRainDisabled().setWaterColor(4159204)));
-	
+	public static BiomeBase SOUL_SAND_VALLEY = registerBiome(new BiomeSoulValley("soul_sand_valley", new BiomeProperties("Soul Sand Valley").setTemperature(2.0F).setRainfall(0.0F).setRainDisabled().setWaterColor(4159204)));
+	//public static BiomeBase BASALT_DELTA = registerBiome(new BiomeBasaltWastes("basalt_delta", new BiomeProperties("Basalt Delta").setTemperature(2.0F).setRainfall(0.0F).setRainDisabled().setWaterColor(4159204)));
+
 	private static BiomeBase registerBiome(BiomeBase biomeIn, Type... types) {
 		BIOME_LIST.add(biomeIn);
 		return biomeIn;

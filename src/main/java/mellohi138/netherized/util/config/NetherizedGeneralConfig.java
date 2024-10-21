@@ -5,6 +5,44 @@ import net.minecraftforge.common.config.Config;
 
 @Config(modid = Netherized.MODID, name = "Netherized/General_Config")
 public class NetherizedGeneralConfig {
+
+	@Config.Name("Bastion Remnants Spawn Frequency")
+	@Config.Comment("Change the spacing between Bastion Remnants, lower means more frequent, higher means less (Block spacing / 6 > frequency)")
+	@Config.RequiresMcRestart
+	public static int bastionFrequency = 100;
+
+	@Config.Name("Bastion Remnants Enable/Disable")
+	@Config.Comment("When set to false, this will disable Bastion Remnants from spawning")
+	@Config.RequiresMcRestart
+	public static boolean bastion_enabled = true;
+
+	@Config.Name("Bastion Remnants Y-level")
+	@Config.Comment("Change the Y-level the Bastion Remnants spawn at, NOTE: this is the level that bridges for will spawn at")
+	@Config.RequiresMcRestart
+	public static double bastionYLevel = 41;
+
+	@Config.Name("Bastion Remnants Mob Spawns")
+	@Config.Comment("Change the spawns alloted in the Bastion Remnants, lower means more mobs, higher means less")
+	@Config.RangeInt(min = 1, max = 10)
+	@Config.RequiresMcRestart
+	public static int bastionSpawnRate = 5;
+
+	@Config.Name("Bastion Remnants Regular Chest Spawn Chance")
+	@Config.Comment("Change the chest spawn chance through general Bastion areas, lower means more likely chance")
+	@Config.RangeInt(min = 1, max = 10)
+	@Config.RequiresMcRestart
+	public static int bastionregularChestChance = 7;
+
+	@Config.Name("Bastion Remnants Hold Chest Spawn Chance")
+	@Config.Comment("Change the chest spawn chance through the stronghold parts of the Bastion, lower means more likely chance")
+	@Config.RangeInt(min = 1, max = 10)
+	@Config.RequiresMcRestart
+	public static int bastionHoldChestChance = 7;
+
+	@Config.Name("Bastion Remnants & Nether Portal Ruins Biomes Blacklist")
+	@Config.Comment("This list acts as a black list for the remnants & nether portal ruins to NOT spawn in")
+	@Config.RequiresMcRestart
+	public static String[] remnantsBiomesNotAllowed = {"nb:basalt_deltas"};
 	@Config.RequiresMcRestart
 	@Config.Comment(value = "Whether or not allow netherite anvil recipes to be used")
 	public static boolean netheriteAnvilRecipes = true;
@@ -57,4 +95,14 @@ public class NetherizedGeneralConfig {
     		"minecraft:soul_sand",
     		Netherized.MODID + ":soul_soil"
     };
+
+	@Config.Name("Nether Backport Global Attack Damage Modifier")
+	@Config.Comment("Modify Attack Damage globally of all mobs added in this mod, only affects Piglin, Piglin Brute, Hoglin, Zoglin, Zombified Piglin")
+	@Config.RequiresMcRestart
+	public static double attackDamageScale = 1;
+
+	@Config.Name("Nether Backport Global Health Modifier")
+	@Config.Comment("Modify Health globally of all mobs added in this mod")
+	@Config.RequiresMcRestart
+	public static double healthScale = 1;
 }

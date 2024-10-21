@@ -34,6 +34,8 @@ public class BiomeTraitGenerationHandler
     {
         event.registry.registerBiome(NetherizedBiomes.CRIMSON_FOREST, 5);
         event.registry.registerBiome(NetherizedBiomes.WARPED_FOREST, 5);
+        event.registry.registerBiome(NetherizedBiomes.SOUL_SAND_VALLEY, 3);
+        //event.registry.registerBiome(NetherizedBiomes.BASALT_DELTA, 3);
     }
 
     @SideOnly(Side.CLIENT)
@@ -45,5 +47,15 @@ public class BiomeTraitGenerationHandler
             event.fogG = 6;
             event.fogB = 25;
         }
+        if(event.biome == NetherizedBiomes.SOUL_SAND_VALLEY) {
+            event.fogR = 27;
+            event.fogG = 71;
+            event.fogB = 69;
+        }
+        //if(event.biome == NetherizedBiomes.BASALT_DELTA) {
+        //    event.fogR = 104;
+        //    event.fogG = 95;
+        //    event.fogB = 112;
+        //}
     }
 }

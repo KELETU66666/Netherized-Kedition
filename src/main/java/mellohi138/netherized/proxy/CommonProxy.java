@@ -24,4 +24,9 @@ public class CommonProxy implements IProxy {
 	@Override
     public void spawnParticle(EnumNetherizedParticles particleEnum, World worldIn, double x, double y, double z, double motX, double motY, double motZ) {
     }
+
+	@Override
+	public void handleAnimationPacket(int entityId, int index) {
+
+	}
 }

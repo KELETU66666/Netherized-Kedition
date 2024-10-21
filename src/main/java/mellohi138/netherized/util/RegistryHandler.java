@@ -3,7 +3,7 @@ package mellohi138.netherized.util;
 import mellohi138.netherized.init.NetherizedBlocks;
 import mellohi138.netherized.init.NetherizedItems;
 import mellohi138.netherized.init.NetherizedSounds;
-import mellohi138.netherized.world.NetherizedWorldGen;
+import mellohi138.netherized.world.NetherizedOreWorldGen;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -29,7 +29,7 @@ public class RegistryHandler {
 	}
 	
 	public static void registerWorldGenerators() {
-		GameRegistry.registerWorldGenerator(new NetherizedWorldGen(), 0);
+		GameRegistry.registerWorldGenerator(new NetherizedOreWorldGen(), 0);
 	}
 	
 	public static void registerOreDict() {

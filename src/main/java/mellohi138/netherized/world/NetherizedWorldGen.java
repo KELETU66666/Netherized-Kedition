@@ -1,51 +1,129 @@
 package mellohi138.netherized.world;
 
-import mellohi138.netherized.init.NetherizedBlocks;
-import net.minecraft.block.state.pattern.BlockMatcher;
+import mellohi138.netherized.Netherized;
+import mellohi138.netherized.util.IStructure;
+import mellohi138.netherized.util.ModRand;
+import mellohi138.netherized.util.ModUtils;
 import net.minecraft.init.Blocks;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.IChunkGenerator;
-import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraft.world.gen.feature.WorldGenerator;
-import net.minecraftforge.fml.common.IWorldGenerator;
+import net.minecraft.world.gen.structure.template.PlacementSettings;
+import net.minecraft.world.gen.structure.template.Template;
+import net.minecraft.world.gen.structure.template.TemplateManager;
+import org.apache.logging.log4j.LogManager;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
-public class NetherizedWorldGen implements IWorldGenerator {
+public class NetherizedWorldGen extends WorldGenerator implements IStructure {
+    /**
+     * Base Class
+     */
 
-	private WorldGenerator ANCIENT_DEBRIS_BIG, ANCIENT_DEBRIS_SMALL, NETHER_GOLDORE, BLACKSTONE_CLUSTER;
+    public String structureName;
 
-	public NetherizedWorldGen() {
-		ANCIENT_DEBRIS_BIG = new WorldGenMinable(NetherizedBlocks.ANCIENT_DEBRIS.getDefaultState(), 3, BlockMatcher.forBlock(Blocks.NETHERRACK));
-		ANCIENT_DEBRIS_SMALL = new WorldGenMinable(NetherizedBlocks.ANCIENT_DEBRIS.getDefaultState(), 2, BlockMatcher.forBlock(Blocks.NETHERRACK));
-		NETHER_GOLDORE = new WorldGenMinable(NetherizedBlocks.NETHER_GOLD_ORE.getDefaultState(), 12, BlockMatcher.forBlock(Blocks.NETHERRACK));
-		BLACKSTONE_CLUSTER = new WorldGenMinable(NetherizedBlocks.BLACKSTONE.getDefaultState(), 33, BlockMatcher.forBlock(Blocks.NETHERRACK));
-	}
+    protected PlacementSettings placementSettings;
 
-	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-		if (!(world.provider instanceof net.minecraft.world.WorldProviderHell))
-			return;
+    private static final PlacementSettings DEFAULT_SETTINGS = new PlacementSettings();
 
-		runGenerator(ANCIENT_DEBRIS_BIG, world, random, chunkX, chunkZ, 2, 8, 23);
-		runGenerator(ANCIENT_DEBRIS_SMALL, world, random, chunkX, chunkZ, 3, 8, 118);
-		runGenerator(NETHER_GOLDORE, world, random, chunkX, chunkZ, 10, 1, 116);
-		runGenerator(BLACKSTONE_CLUSTER, world, random, chunkX, chunkZ, 2, 5, 27);
+    private Template template;
 
-	}
+    private float attempts;
 
-	private void runGenerator(WorldGenerator gen, World world, Random rand, int chunkX, int chunkZ, int chancesToSpawn, int minHeight, int maxHeight) {
-		if(minHeight > maxHeight || minHeight < 0 || maxHeight > 256) throw new IllegalArgumentException("Illegal Height Arguments for WorldGenerator");
+    private int maxVar;
 
-		int heightDiff = maxHeight - minHeight + 1;
-		for(int i = 0; i < chancesToSpawn; i++) {
-			int x = chunkX * 16 + rand.nextInt(16);
-			int y = minHeight + rand.nextInt(heightDiff);
-			int z = chunkZ * 16 + rand.nextInt(16);
 
-			gen.generate(world, rand, new BlockPos(x, y, z));
-		}
-	}
+
+    @Override
+    public boolean generate(World worldIn, Random rand, BlockPos position) {
+        this.generateStructure(worldIn, position, ModRand.choice(Rotation.values()));
+        return true;
+    }
+
+    public NetherizedWorldGen(String structureName) {
+        this.structureName = structureName;
+        this.placementSettings = DEFAULT_SETTINGS.setIgnoreEntities(true).setReplacedBlock(Blocks.AIR);
+    }
+
+    public float getAttempts() {
+        return attempts;
+    }
+
+    private Template getTemplate(World world) {
+        if (template != null) {
+            return template;
+        }
+
+        MinecraftServer mcServer = world.getMinecraftServer();
+        TemplateManager manager = worldServer.getStructureTemplateManager();
+        ResourceLocation location = new ResourceLocation(Netherized.MODID , structureName);
+        template = manager.get(mcServer, location);
+        if (template == null) {
+            LogManager.getLogger().debug("The template, " + location + " could not be loaded");
+            return null;
+        }
+        return template;
+    }
+
+    public BlockPos getSize(World world) {
+        if (getTemplate(world) == null) {
+            return BlockPos.ORIGIN;
+        }
+
+        return template.getSize();
+    }
+
+    public int getMaxVariation(World world) {
+        if (maxVar != 0) {
+            return maxVar;
+        }
+
+        if (getTemplate(world) == null) {
+            return 0;
+        }
+
+        return (int) Math.floor(template.getSize().getY() * 0.25);
+    }
+
+    public BlockPos getCenter(World world) {
+        if (getTemplate(world) == null) {
+            return BlockPos.ORIGIN;
+        }
+
+        return new BlockPos(Math.floorDiv(template.getSize().getX(), 2), Math.floorDiv(template.getSize().getY(), 2), Math.floorDiv(template.getSize().getZ(), 2));
+    }
+
+    public int getYGenHeight(World world, int x, int z) {
+        BlockPos templateSize = this.getSize(world);
+        return ModUtils.getAverageGroundHeight(world, x, z, templateSize.getX(), templateSize.getZ(), this.getMaxVariation(world));
+    }
+
+    public void generateStructure(World worldIn, BlockPos pos, Rotation rotation) {
+        if (getTemplate(worldIn) != null) {
+            Map<Rotation, BlockPos> rotations = new HashMap<Rotation, BlockPos>();
+            rotations.put(Rotation.NONE, new BlockPos(0, 0, 0));
+            rotations.put(Rotation.CLOCKWISE_90, new BlockPos(template.getSize().getX() - 1, 0, 0));
+            rotations.put(Rotation.COUNTERCLOCKWISE_90, new BlockPos(0, 0, template.getSize().getZ() - 1));
+            rotations.put(Rotation.CLOCKWISE_180, new BlockPos(template.getSize().getX() - 1, 0, template.getSize().getZ() - 1));
+
+            BlockPos rotationOffset = rotations.get(rotation);
+            PlacementSettings rotatedSettings = settings.setRotation(rotation).setReplacedBlock(Blocks.STRUCTURE_VOID);
+            BlockPos rotatedPos = pos.add(rotationOffset);
+
+            template.addBlocksToWorld(worldIn, rotatedPos, rotatedSettings, 18);
+            Map<BlockPos, String> dataBlocks = template.getDataBlocks(rotatedPos, rotatedSettings);
+            for (Map.Entry<BlockPos, String> entry : dataBlocks.entrySet()) {
+                String s = entry.getValue();
+                this.handleDataMarker(s, entry.getKey(), worldIn, worldIn.rand);
+            }
+        }
+    }
+
+    protected void handleDataMarker(String function, BlockPos pos, World worldIn, Random rand) {
+    }
 }
