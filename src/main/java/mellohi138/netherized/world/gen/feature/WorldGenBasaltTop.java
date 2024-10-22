@@ -1,6 +1,5 @@
 package mellohi138.netherized.world.gen.feature;
 
-import git.jbredwards.nether_api.mod.common.config.NetherAPIConfig;
 import mellohi138.netherized.init.NetherizedBlocks;
 import mellohi138.netherized.util.ModRand;
 import mellohi138.netherized.world.NetherizedWorldGen;
@@ -17,7 +16,7 @@ public class WorldGenBasaltTop extends NetherizedWorldGen {
 
     @Override
     public boolean generate(World worldIn, Random rand, BlockPos position) {
-        int yVar = getNetherSurfaceHeight(worldIn, position.add(3, 1, 3), 32, NetherAPIConfig.tallNether ? 240 : 120);
+        int yVar = getNetherSurfaceHeight(worldIn, position.add(3, 1, 3), 32, 120);
         if(yVar != 0) {
             replaceandBuildPillar(worldIn, new BlockPos(position.getX() + 3, position.getY() + 1, position.getZ() + 3), rand, yVar);
                return super.generate(worldIn, rand, new BlockPos(position.getX(), 31, position.getZ()));

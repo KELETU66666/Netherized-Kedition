@@ -31,7 +31,7 @@ public class RegistryHandler {
 	public static void registerWorldGenerators() {
 		GameRegistry.registerWorldGenerator(new NetherizedOreWorldGen(), 0);
 	}
-	
+
 	public static void registerOreDict() {
 		OreDictionary.registerOre("ingotNetherite", NetherizedItems.NETHERITE_INGOT);
 		OreDictionary.registerOre("blockNetherite", NetherizedBlocks.NETHERITE_BLOCK);

@@ -30,17 +30,12 @@ minecraft {
 repositories {
     //Cursemaven
     maven { url "https://www.cursemaven.com" }
-    maven { url 'https://jitpack.io' }
 }
 
 jar {
     manifest {
         attributes 'FMLAT': 'accesstransformer.cfg'
     }
-}
-
-dependencies {
-    deobfCompile 'com.github.jbredwards:nether-API:f2f48d7b8b'
 }
 
 processResources {

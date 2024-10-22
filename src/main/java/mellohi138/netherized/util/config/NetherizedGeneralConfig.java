@@ -42,7 +42,7 @@ public class NetherizedGeneralConfig {
 	@Config.Name("Bastion Remnants & Nether Portal Ruins Biomes Blacklist")
 	@Config.Comment("This list acts as a black list for the remnants & nether portal ruins to NOT spawn in")
 	@Config.RequiresMcRestart
-	public static String[] remnantsBiomesNotAllowed = {"nb:basalt_deltas"};
+	public static String[] remnantsBiomesNotAllowed = {};
 	@Config.RequiresMcRestart
 	@Config.Comment(value = "Whether or not allow netherite anvil recipes to be used")
 	public static boolean netheriteAnvilRecipes = true;

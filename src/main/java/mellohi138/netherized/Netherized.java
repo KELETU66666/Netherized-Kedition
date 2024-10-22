@@ -6,8 +6,11 @@ import mellohi138.netherized.util.NetherizedCreativeTabs;
 import mellohi138.netherized.util.RegistryHandler;
 import mellohi138.netherized.util.interfaces.IProxy;
 import mellohi138.netherized.world.StructureHandler;
+import mellohi138.netherized.world.gen.chunk.WorldProviderNetherized;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.DimensionType;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -45,6 +48,7 @@ public class Netherized {
         RegistryHandler.registerWorldGenerators();
         RegistryHandler.registerBlockSounds();
         RegistryHandler.registerMobUtils();
+        registerNetherOverride();
         PROXY.preInit();
     }
 
@@ -69,5 +73,11 @@ public class Netherized {
         //  sendNonLocal(message, playerMP);
         //  }
         //network.sendToAll(message);
+    }
+
+    public static void registerNetherOverride()
+    {
+        DimensionManager.unregisterDimension(-1);
+        DimensionManager.registerDimension(-1, DimensionType.register("Nether", "_nether", -1, WorldProviderNetherized.class, false));
     }
 }

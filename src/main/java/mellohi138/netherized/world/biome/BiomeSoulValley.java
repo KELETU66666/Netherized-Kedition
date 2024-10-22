@@ -1,15 +1,10 @@
 package mellohi138.netherized.world.biome;
 
-import git.jbredwards.nether_api.api.audio.IMusicType;
-import git.jbredwards.nether_api.api.biome.IAmbienceBiome;
-import git.jbredwards.nether_api.api.biome.INetherBiome;
-import git.jbredwards.nether_api.api.registry.INetherAPIRegistryListener;
-import git.jbredwards.nether_api.api.world.INetherAPIChunkGenerator;
-import git.jbredwards.nether_api.mod.common.config.NetherAPIConfig;
 import mellohi138.netherized.init.NetherizedBlocks;
 import mellohi138.netherized.objects.entity.passive.EntityStrider;
 import mellohi138.netherized.util.ModRand;
 import mellohi138.netherized.world.NetherizedWorldGen;
+import mellohi138.netherized.world.gen.chunk.ChunkGeneratorNetherized;
 import mellohi138.netherized.world.gen.feature.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -19,7 +14,6 @@ import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraftforge.common.BiomeDictionary;
@@ -27,7 +21,7 @@ import net.minecraftforge.common.BiomeDictionary;
 import javax.annotation.Nonnull;
 import java.util.Random;
 
-public class BiomeSoulValley extends BiomeBase implements INetherBiome, INetherAPIRegistryListener, IAmbienceBiome {
+public class BiomeSoulValley extends BiomeBase implements INetherizedBiomes {
     public static BiomeProperties properties = new BiomeProperties("Soul Sand Valley");
     private static final IBlockState CRIMSON_FLOOR = NetherizedBlocks.SOUL_SOIL.getDefaultState();
 
@@ -58,7 +52,7 @@ public class BiomeSoulValley extends BiomeBase implements INetherBiome, INetherA
         this.spawnableCaveCreatureList.clear();
         this.spawnableMonsterList.add(new SpawnListEntry(EntityEnderman.class, 4, 1, 1));
         this.spawnableMonsterList.add(new SpawnListEntry(EntitySkeleton.class, 40, 1, 2));
-        this.spawnableCreatureList.add(new SpawnListEntry(EntityWitherSkeleton.class, 10, 1, 2));
+        this.spawnableMonsterList.add(new SpawnListEntry(EntityWitherSkeleton.class, 10, 1, 2));
         this.spawnableMonsterList.add(new SpawnListEntry(EntityGhast.class, 36, 1, 2));
         this.spawnableCreatureList.add(new SpawnListEntry(EntityStrider.class, 60, 2, 4));
         //Add Strider weight 10, min 2, max 4
@@ -79,7 +73,7 @@ public class BiomeSoulValley extends BiomeBase implements INetherBiome, INetherA
                 int l6 = random.nextInt(16) + 8;
                 int k10 = random.nextInt(16) + 8;
                 int depthSignature = 2;
-                for (int y = NetherAPIConfig.tallNether ? 240 : 110; y > 32; y--) {
+                for (int y = 110; y > 32; y--) {
                     IBlockState currentBlock = world.getBlockState(pos.add(l6, y, k10));
                     if (depthSignature == 1) {
                         NetherizedWorldGen fossils_from = ModRand.choice(fossils);
@@ -100,7 +94,7 @@ public class BiomeSoulValley extends BiomeBase implements INetherBiome, INetherA
             int l6 = random.nextInt(16) + 8;
             int k10 = random.nextInt(16) + 8;
             int depthSignature = 2;
-            for (int y = NetherAPIConfig.tallNether ? 240 : 110; y > 32; y--) {
+            for (int y = 110; y > 32; y--) {
                 IBlockState currentBlock = world.getBlockState(pos.add(l6, y, k10));
                 if (depthSignature == 1) {
                     if (!world.isAirBlock(pos.add(l6, y, k10))) {
@@ -123,7 +117,7 @@ public class BiomeSoulValley extends BiomeBase implements INetherBiome, INetherA
                 int l6 = random.nextInt(16) + 8;
                 int k10 = random.nextInt(16) + 8;
                 int depthSignature = 2;
-                for (int y = NetherAPIConfig.tallNether ? 240 : 110; y > 32; y--) {
+                for (int y = 110; y > 32; y--) {
                     IBlockState currentBlock = world.getBlockState(pos.add(l6, y, k10));
                     if (depthSignature == 1) {
                         soulFire.generate(world, rand, pos.add(l6, y + 1, k10));
@@ -153,14 +147,24 @@ public class BiomeSoulValley extends BiomeBase implements INetherBiome, INetherA
     }
 
     @Override
-    public void buildSurface(@Nonnull INetherAPIChunkGenerator chunkGenerator, int chunkX, int chunkZ, @Nonnull ChunkPrimer primer, int x, int z, double[] soulSandNoise, double[] gravelNoise, double[] depthBuffer, double terrainNoise) {
+    public int getBiomeColor(int paramInt1, int paramInt2, int paramInt3) {
+        return 47821;
+    }
+
+    @Nonnull
+    @Override
+    public int getSkyColorByTemp(float currentTemperature) {
+        return 47821;
+    }
+
+    public void buildSurface(@Nonnull ChunkGeneratorNetherized chunkGenerator, int chunkX, int chunkZ, @Nonnull ChunkPrimer primer, int x, int z, double[] soulSandNoise, double[] gravelNoise, double[] depthBuffer) {
         int currDepth = -1;
         for (int y = chunkGenerator.getWorld().getActualHeight() - 1; y >= 0; --y) {
             final IBlockState here = primer.getBlockState(x, y, z);
             if (here.getMaterial() == Material.AIR) currDepth = -1;
             else if (here.getBlock() == Blocks.NETHERRACK) {
                 if (currDepth == -1) {
-                    currDepth = 2 + chunkGenerator.getRand().nextInt(2);
+                    currDepth = 2 + chunkGenerator.getWorld().rand.nextInt(2);
                     primer.setBlockState(x, y, z, topBlock);
                 } else if (currDepth > 0) {
                     --currDepth;
@@ -169,23 +173,6 @@ public class BiomeSoulValley extends BiomeBase implements INetherBiome, INetherA
                 }
             }
         }
-    }
-
-    @Override
-    public void populate(@Nonnull INetherAPIChunkGenerator chunkGenerator, int chunkX, int chunkZ) {
-        INetherBiome.super.populate(chunkGenerator, chunkX, chunkZ);
-    }
-
-    @Nonnull
-    @Override
-    public Vec3d getFogColor(float celestialAngle, float partialTicks) {
-        return new Vec3d(0, 0.475, 0.569);
-    }
-
-    @Nonnull
-    @Override
-    public IMusicType getMusicType() {
-        return INetherBiome.super.getMusicType();
     }
 
     private int getNetherSurfaceHeight(World world, BlockPos pos, int min, int max) {

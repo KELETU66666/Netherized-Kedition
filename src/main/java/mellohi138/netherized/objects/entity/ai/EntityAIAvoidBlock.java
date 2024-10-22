@@ -1,13 +1,13 @@
 package mellohi138.netherized.objects.entity.ai;
 
-import java.util.List;
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+
+import java.util.List;
+import java.util.Random;
 
 /*
 * Author: grim3212
